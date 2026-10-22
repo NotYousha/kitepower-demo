@@ -1,845 +1,508 @@
-<!doctype html>
-<html lang="en-CA">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
 <title>Kitepower</title>
-<meta name="description" content="Kitepower builds containerized 50 kW kite-power plants that replace diesel on remote microgrids, starting in Newfoundland and Labrador.">
-<meta name="theme-color" content="#04080F">
-<meta name="robots" content="noindex">
-<meta name="color-scheme" content="dark">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 4 L19 8 L15 19 L3 13 Z' fill='%23FF6B1F'/%3E%3C/svg%3E">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: flight deck. A full-bleed night-sky hero carries a live simulated K-50 with a telemetry readout;
-   below it a calm document column on a stratosphere ground, every number drawn to scale.
-   Aviation orange (the obstruction-marking colour every tethered aircraft wears) is the one accent. */
+/* Layout: a solid, softly lit content layer (ocean-light gradient field + drifting light orbs + the kite scene) with a separate floating glass layer
+   for navigation, controls and KPI tiles, following Apple's Liquid Glass guidance: glass for controls and navigation, never for body copy.
+   Motion: one orchestrated page-load sequence in the hero, pointer-tracked specular highlights on glass, scroll-linked reveals, drawn connectors. */
 :root{
-  color-scheme:dark;
-  --ground:#0A0F17; --ground-2:#0E1520; --card:#111A27; --ink:#E8EDF3; --ink-2:#9DAABA; --ink-3:#6E7B8C;
-  --rule:rgba(232,237,243,.10); --rule-2:rgba(232,237,243,.18);
-  --orange:#FF6B1F; --orange-soft:rgba(255,107,31,.16); --ice:#8FD0FF; --sea:#43C2AC; --neg:#8A97A8;
-  --night-1:#04080F; --night-2:#0A1828; --night-3:#123049; --night-ink:#EEF3F8; --night-ink-2:#A9B7C7; --night-rule:rgba(238,243,248,.14);
-  --lg-tint:rgba(16,25,38,.46); --lg-tint-bar:rgba(4,8,15,.58); --lg-rim-hi:rgba(255,255,255,.34); --lg-rim-lo:rgba(255,255,255,.05);
-  --lg-spec:rgba(255,255,255,.13); --lg-sheen:rgba(255,255,255,.05); --lg-shadow:0 18px 40px rgba(0,0,0,.38),0 2px 6px rgba(0,0,0,.25);
-  --amb1:rgba(255,107,31,.16); --amb2:rgba(143,208,255,.14); --amb3:rgba(67,194,172,.12);
-  --display:'Archivo','Arial Narrow',Helvetica,Arial,sans-serif;
-  --body:'IBM Plex Sans',-apple-system,'Segoe UI',Helvetica,Arial,sans-serif;
-  --mono:'IBM Plex Mono',ui-monospace,'SFMono-Regular',Consolas,monospace;
+  --bg:#F3F6FA; --bg2:#E9EFF6; --ink:#0B1A2E; --ink2:#4E5E72; --ink3:#7A889A; --line:rgba(11,26,46,.08);
+  --blue:#0A66FF; --teal:#13A58E; --amber:#F0A530; --navy:#0B1F3A;
+  --glass:rgba(255,255,255,.50); --glass-strong:rgba(255,255,255,.72); --glass-edge:rgba(255,255,255,.9); --glass-shadow:0 12px 32px rgba(11,31,58,.10), 0 1px 2px rgba(11,31,58,.06);
+  --spec:rgba(255,255,255,.55);
+  --orb1:#BFE3FF; --orb2:#C9F3EA; --orb3:#FFE3B8; --orb4:#D7DCFF;
+  --onnavy:#F4F7FA; --onnavy2:#B9C8D6;
+  --font:'Inter', -apple-system, 'SF Pro Text', 'Segoe UI', Helvetica, Arial, sans-serif;
   --ease:cubic-bezier(.2,.8,.2,1);
 }
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#070D17;--bg2:#0B1424;--ink:#F2F5F9;--ink2:#AEBBCB;--ink3:#7E8CA0;--line:rgba(255,255,255,.08);--blue:#5AA2FF;--teal:#2FD1B5;--amber:#FFC266;--glass:rgba(22,34,52,.46);--glass-strong:rgba(22,34,52,.70);--glass-edge:rgba(255,255,255,.22);--glass-shadow:0 14px 40px rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.4);--spec:rgba(255,255,255,.14);--orb1:#163B6E;--orb2:#0E4A44;--orb3:#4A3A14;--orb4:#2A2D6E;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#070D17;--bg2:#0B1424;--ink:#F2F5F9;--ink2:#AEBBCB;--ink3:#7E8CA0;--line:rgba(255,255,255,.08);--blue:#5AA2FF;--teal:#2FD1B5;--amber:#FFC266;--glass:rgba(22,34,52,.46);--glass-strong:rgba(22,34,52,.70);--glass-edge:rgba(255,255,255,.22);--glass-shadow:0 14px 40px rgba(0,0,0,.45), 0 1px 2px rgba(0,0,0,.4);--spec:rgba(255,255,255,.14);--orb1:#163B6E;--orb2:#0E4A44;--orb3:#4A3A14;--orb4:#2A2D6E;color-scheme:dark}
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{background:var(--ground);color:var(--ink);font-family:var(--body);font-size:17px;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--night-1)}
-h1,h2,h3{font-family:var(--display);margin:0;text-wrap:balance;line-height:1.02}
-h2{font-size:clamp(32px,4.6vw,58px);font-weight:760;font-variation-settings:"wdth" 112;letter-spacing:-0.025em}
-h3{font-size:20px;font-weight:700;font-variation-settings:"wdth" 104;letter-spacing:-0.01em;line-height:1.2}
+body{background:var(--bg);color:var(--ink);font-family:var(--font);font-size:17px;line-height:1.55;overflow-x:hidden;-webkit-font-smoothing:antialiased;position:relative}
+/* content-layer light field */
+.field{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;background:linear-gradient(180deg,var(--bg) 0%,var(--bg2) 100%)}
+.field i{position:absolute;border-radius:50%;filter:blur(70px);opacity:.9;will-change:transform}
+.field .o1{width:60vw;height:60vw;left:-15vw;top:-20vw;background:var(--orb1);animation:drift1 26s ease-in-out infinite alternate}
+.field .o2{width:45vw;height:45vw;right:-10vw;top:10vh;background:var(--orb2);animation:drift2 32s ease-in-out infinite alternate}
+.field .o3{width:40vw;height:40vw;left:30vw;top:60vh;background:var(--orb3);opacity:.7;animation:drift3 38s ease-in-out infinite alternate}
+.field .o4{width:50vw;height:50vw;right:-5vw;bottom:-20vw;background:var(--orb4);animation:drift1 30s ease-in-out infinite alternate-reverse}
+@keyframes drift1{to{transform:translate(8vw,6vh) scale(1.08)}}
+@keyframes drift2{to{transform:translate(-10vw,10vh) scale(.95)}}
+@keyframes drift3{to{transform:translate(-6vw,-8vh) scale(1.1)}}
+.page{position:relative;z-index:1}
+.in{max-width:1180px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+h1,h2,h3{line-height:1.08;text-wrap:balance;margin:0;letter-spacing:-0.02em}
+h2{font-size:clamp(32px,4.2vw,52px);font-weight:700}
+h3{font-size:21px;font-weight:600;letter-spacing:-0.01em}
 p{margin:0}
-a{color:inherit}
-.in{max-width:1160px;margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.label{font-family:var(--mono);font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
-.label.o{color:var(--orange)}
-.lede{font-size:clamp(17px,1.5vw,20px);color:var(--ink-2);max-width:36em}
-.num{font-variant-numeric:tabular-nums}
-:focus-visible{outline:2px solid var(--orange);outline-offset:3px}
-
-/* nav */
-.nav{position:sticky;top:env(safe-area-inset-top,0px);z-index:30;background:rgba(4,8,15,.72);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);border-bottom:1px solid var(--night-rule);color:var(--night-ink)}
-.nav .in{display:flex;align-items:center;justify-content:space-between;gap:16px;height:58px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:800;font-variation-settings:"wdth" 118;font-size:17px;letter-spacing:.02em;text-transform:uppercase}
-.brand svg{width:22px;height:22px;flex:none}
-.nav ul{list-style:none;margin:0;padding:0;display:flex;gap:4px;font-size:14px}
-.nav ul a{display:block;padding:6px 11px;border-radius:6px;text-decoration:none;color:var(--night-ink-2);transition:color .2s,background .2s}
-.nav ul a:hover,.nav ul a.on{color:var(--night-ink);background:rgba(238,243,248,.08)}
-@media (max-width:960px){.nav ul{display:none}}
-.btn{display:inline-flex;align-items:center;gap:10px;padding:12px 20px;border-radius:8px;font-family:var(--body);font-weight:600;font-size:15px;text-decoration:none;border:1px solid transparent;cursor:pointer;transition:transform .25s var(--ease),background .25s,border-color .25s}
-.btn:hover{transform:translateY(-1px)}
-.btn.primary{background:#FF6B1F;color:#140600}
-.btn.primary:hover{background:#FF7F3D}
-.btn.ghost{color:var(--night-ink);border-color:rgba(238,243,248,.28)}
-.btn.ghost:hover{border-color:rgba(238,243,248,.6)}
-.btn.sm{padding:8px 14px;font-size:14px}
-.btn .arr{font-family:var(--mono)}
-
+.eyebrow{font-size:13px;letter-spacing:.06em;text-transform:uppercase;font-weight:600;color:var(--blue)}
+a{color:var(--blue)}
+.muted{color:var(--ink2)}
+/* glass material */
+.glass{background:var(--glass);-webkit-backdrop-filter:blur(24px) saturate(180%);backdrop-filter:blur(24px) saturate(180%);border:1px solid transparent;position:relative;box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge),inset 0 -1px 0 rgba(255,255,255,.08);--mx:30%;--my:0%}
+.glass::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;background:linear-gradient(135deg,var(--glass-edge) 0%,rgba(255,255,255,.08) 35%,rgba(255,255,255,0) 60%,var(--glass-edge) 100%);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude;pointer-events:none}
+.glass::after{content:"";position:absolute;inset:0;border-radius:inherit;background:radial-gradient(140% 70% at var(--mx) var(--my),var(--spec),rgba(255,255,255,0) 55%);pointer-events:none;transition:opacity .4s;opacity:.8}
+.glass.strong{background:var(--glass-strong)}
+@media (prefers-reduced-transparency:reduce){.glass{background:var(--glass-strong);-webkit-backdrop-filter:none;backdrop-filter:none}}
+/* floating nav */
+.navwrap{position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px);z-index:20;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+nav{max-width:1180px;margin:0 auto;border-radius:999px;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 10px 8px 18px;transition:max-width .6s var(--ease),padding .4s var(--ease);overflow:hidden}
+nav.compact{max-width:980px;padding:6px 8px 6px 16px}
+nav .prog{position:absolute;left:0;bottom:0;height:2px;width:0;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .1s linear}
+.logo{font-weight:700;font-size:17px;letter-spacing:-0.01em;display:flex;align-items:center;gap:9px;color:var(--ink);text-decoration:none}
+.logo i{width:12px;height:12px;background:linear-gradient(135deg,var(--teal),var(--amber));transform:rotate(45deg);border-radius:3px;box-shadow:0 0 12px rgba(19,165,142,.5)}
+nav ul{list-style:none;margin:0;padding:0;display:flex;gap:2px;font-size:14px;font-weight:500}
+nav ul a{color:var(--ink2);text-decoration:none;padding:7px 12px;border-radius:999px;transition:background .25s,color .25s}
+nav ul a:hover,nav ul a:focus-visible,nav ul a.on{background:rgba(127,143,160,.16);color:var(--ink)}
+@media (max-width:900px){nav ul{display:none}}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:999px;font-weight:600;text-decoration:none;font-size:15px;transition:transform .3s var(--ease),box-shadow .3s;letter-spacing:-0.01em;will-change:transform}
+.btn:hover{transform:translateY(-1px) scale(1.02)}
+.btn:active{transform:scale(.97)}
+.btn.primary{background:linear-gradient(180deg,#2E7DFF,var(--blue));color:#fff;box-shadow:0 8px 22px rgba(10,102,255,.3),inset 0 1px 0 rgba(255,255,255,.4)}
+.btn.glassy{color:var(--ink)}
+.btn:focus-visible,a:focus-visible,button:focus-visible{outline:2px solid var(--blue);outline-offset:3px}
 /* hero */
-.hero{position:relative;background:linear-gradient(180deg,var(--night-1) 0%,var(--night-2) 55%,var(--night-3) 100%);color:var(--night-ink);overflow:hidden}
-.hero canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-.hero .scrim{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,8,15,.82) 0%,rgba(4,8,15,.45) 42%,rgba(4,8,15,0) 70%);pointer-events:none}
-.hero>.in{position:relative;display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:40px;align-items:end;padding-block:110px 56px;min-height:640px}
-.hero h1{font-size:clamp(46px,7.4vw,108px);font-weight:820;font-variation-settings:"wdth" 116;letter-spacing:-0.035em;line-height:.94;margin-top:18px}
-.hero h1 em{font-style:normal;color:#FF6B1F}
-.hero .lede{color:var(--night-ink-2);margin-top:24px}
-.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:32px}
-.hero .label{color:var(--night-ink-2)}
-.hud{background:rgba(4,8,15,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid var(--night-rule);border-radius:10px;padding:16px 18px;font-family:var(--mono);font-size:13px;min-width:0}
-.hud .top{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-bottom:10px;border-bottom:1px solid var(--night-rule);margin-bottom:6px}
-.hud .phase{display:inline-flex;align-items:center;gap:8px;color:#FF6B1F;font-weight:500;letter-spacing:.08em}
-.hud .phase i{width:8px;height:8px;border-radius:50%;background:currentColor;box-shadow:0 0 0 0 currentColor;animation:ping 1.6s infinite}
-.hud .phase.in{color:var(--night-ink-2)}
-@keyframes ping{70%{box-shadow:0 0 0 7px rgba(255,107,31,0)}100%{box-shadow:0 0 0 0 rgba(255,107,31,0)}}
-.hud dl{display:grid;grid-template-columns:1fr auto;gap:5px 14px;margin:0}
-.hud dt{color:var(--night-ink-2)}
-.hud dd{margin:0;text-align:right;font-variant-numeric:tabular-nums;color:var(--night-ink)}
-.hud dd.big{font-size:22px;color:#FF6B1F;font-weight:500}
-.hud .foot{margin-top:10px;padding-top:10px;border-top:1px solid var(--night-rule);color:var(--night-ink-2);font-size:11.5px;line-height:1.5}
-@media (max-width:880px){.hero>.in{grid-template-columns:1fr;min-height:0;padding-block:72px 32px}.hero .scrim{background:linear-gradient(180deg,rgba(4,8,15,.85) 0%,rgba(4,8,15,.5) 60%,rgba(4,8,15,.3) 100%)}}
-.figs{position:relative;border-top:1px solid var(--night-rule);background:rgba(4,8,15,.55)}
-.figs .in{display:grid;grid-template-columns:repeat(5,minmax(0,1fr))}
-.figs div.f{padding:20px 18px 22px;border-left:1px solid var(--night-rule);min-width:0}
-.figs div.f:first-child{border-left:0;padding-left:0}
-.figs b{display:block;font-family:var(--display);font-variation-settings:"wdth" 110;font-size:26px;font-weight:760;letter-spacing:-0.02em;font-variant-numeric:tabular-nums}
-.figs small{display:block;color:var(--night-ink-2);font-size:13px;line-height:1.4;margin-top:2px}
-@media (max-width:880px){.figs .in{grid-template-columns:repeat(2,minmax(0,1fr))}.figs div.f{border-left:0;border-top:1px solid var(--night-rule);padding-left:0}.figs div.f:nth-child(-n+2){border-top:0}.figs div.f:nth-child(even){padding-left:18px;border-left:1px solid var(--night-rule)}.figs div.f:last-child{grid-column:1/-1;padding-left:0;border-left:0}}
-
-/* sections */
-section{padding-block:96px;border-top:1px solid var(--rule);scroll-margin-top:58px}
-.head{display:grid;gap:14px;max-width:780px;margin-bottom:48px}
-.two{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;align-items:start}
-@media (max-width:880px){.two{grid-template-columns:1fr}}
-.card{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:24px;min-width:0}
-.src{font-size:13px;color:var(--ink-3);margin-top:28px;max-width:72em;line-height:1.55}
-.src a{color:var(--ink-3)}
-.note{font-family:var(--mono);font-size:12px;color:var(--ink-3);margin-top:12px;line-height:1.5}
-
-/* cost chart */
-.cost{display:grid;gap:22px}
-.cost .row{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) 5.5em;gap:16px;align-items:center}
-.cost .row span:first-child{font-size:15px;color:var(--ink-2);line-height:1.35}
-.track{position:relative;height:30px;background:var(--ground-2);border-radius:4px;overflow:hidden}
-.track i{position:absolute;top:0;bottom:0;left:0;border-radius:4px;transform-origin:left;transition:transform 1.2s var(--ease)}
-.cost.pre .track i{transform:scaleX(0)}
-.cost .val{font-family:var(--mono);font-size:15px;text-align:right;font-variant-numeric:tabular-nums}
-.axis{display:grid;grid-template-columns:minmax(0,15em) minmax(0,1fr) 5.5em;gap:16px}
-.axis div{position:relative;height:18px;font-family:var(--mono);font-size:11px;color:var(--ink-3)}
-.axis div span{position:absolute;transform:translateX(-50%)}
-.axis div span:first-child{transform:none}
-.axis div span:last-child{transform:translateX(-100%)}
-@media (max-width:640px){.cost .row,.axis{grid-template-columns:minmax(0,1fr) 4.6em}.cost .row span:first-child{grid-column:1/-1}.cost .row .track{grid-column:1}.axis div:first-child{display:none}}
-.stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;margin-top:56px;border-top:1px solid var(--rule)}
-.stats div{padding:22px 20px 0 0;min-width:0}
-.stats b{display:block;font-family:var(--display);font-variation-settings:"wdth" 112;font-size:clamp(34px,3.8vw,48px);font-weight:780;letter-spacing:-0.03em;line-height:1;font-variant-numeric:tabular-nums}
-.stats p{font-size:14.5px;color:var(--ink-2);margin-top:10px}
-@media (max-width:880px){.stats{grid-template-columns:repeat(2,minmax(0,1fr));row-gap:28px}}
-
-/* altitude */
-.alt svg{width:100%;height:auto;display:block}
-.alt text{font-family:var(--mono);font-size:11px;fill:var(--ink-3)}
-.alt .lbl{font-family:var(--body);font-size:13px;font-weight:600;fill:var(--ink)}
-.alt .big{font-family:var(--display);font-size:22px;font-weight:780;fill:var(--orange)}
-.facts{display:grid;gap:0}
-.facts div{display:grid;grid-template-columns:auto 1fr;gap:18px;padding:18px 0;border-top:1px solid var(--rule)}
-.facts div:first-child{border-top:0;padding-top:0}
-.facts b{font-family:var(--display);font-variation-settings:"wdth" 112;font-size:32px;font-weight:780;letter-spacing:-0.02em;color:var(--orange);min-width:3.6em;line-height:1.1;font-variant-numeric:tabular-nums}
-.facts p{color:var(--ink-2);font-size:15.5px}
-.facts p strong{color:var(--ink);font-weight:600}
-
-/* cycle chart */
-.cyc svg{width:100%;height:auto;display:block;overflow:visible}
-.cyc text{font-family:var(--mono);font-size:11px;fill:var(--ink-3)}
-.cyc .t{font-family:var(--body);font-size:13px;font-weight:600;fill:var(--ink)}
-.steps{display:grid;gap:0;counter-reset:s}
-.steps li{list-style:none;display:grid;grid-template-columns:2.2em 1fr;gap:14px;padding:18px 0;border-top:1px solid var(--rule)}
-.steps li:first-child{border-top:0;padding-top:0}
-.steps li::before{counter-increment:s;content:counter(s);font-family:var(--mono);font-size:13px;color:var(--orange);border:1px solid var(--orange);border-radius:50%;width:2em;height:2em;display:grid;place-items:center}
-.steps p{color:var(--ink-2);font-size:15.5px;margin-top:4px}
-.steps ol{margin:0;padding:0}
-
-/* specs */
-.spec{width:100%;border-collapse:collapse;font-size:15px}
-.spec th,.spec td{padding:12px 0;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
-.spec th{font-weight:400;color:var(--ink-2);padding-right:18px;width:42%}
-.spec td{font-family:var(--mono);font-size:14px;font-variant-numeric:tabular-nums}
-.spec tr:last-child th,.spec tr:last-child td{border-bottom:0}
-.offers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
-.offer{background:var(--card);border:1px solid var(--rule);border-radius:12px;padding:22px;display:flex;flex-direction:column;gap:8px;min-width:0}
-.offer.rec{border-color:var(--orange);box-shadow:0 0 0 1px var(--orange) inset}
-.offer .price{font-family:var(--display);font-variation-settings:"wdth" 110;font-size:30px;font-weight:780;letter-spacing:-0.02em;line-height:1.05}
-.offer p{color:var(--ink-2);font-size:15px}
-.offer .tag{align-self:flex-start;font-family:var(--mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;padding:3px 8px;border-radius:4px;background:var(--orange-soft);color:var(--orange)}
-@media (max-width:880px){.offers{grid-template-columns:1fr}}
-.os{margin-top:18px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:0;border:1px solid var(--rule);border-radius:12px;background:var(--card)}
-.os div{padding:20px;border-left:1px solid var(--rule);min-width:0}
-.os div:first-child{border-left:0}
-.os p{color:var(--ink-2);font-size:14.5px;margin-top:6px}
-@media (max-width:880px){.os{grid-template-columns:1fr 1fr}.os div:nth-child(3){border-left:0}.os div:nth-child(n+3){border-top:1px solid var(--rule)}}
-@media (max-width:520px){.os{grid-template-columns:1fr}.os div{border-left:0!important}.os div+div{border-top:1px solid var(--rule)}}
-
-/* calculator */
-.calc{display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);gap:0;background:var(--card);border:1px solid var(--rule);border-radius:14px;overflow:hidden}
-@media (max-width:880px){.calc{grid-template-columns:1fr}}
-.ctrls{padding:28px;display:grid;gap:26px;border-right:1px solid var(--rule)}
-@media (max-width:880px){.ctrls{border-right:0;border-bottom:1px solid var(--rule)}}
-.ctrl label{display:flex;justify-content:space-between;gap:12px;font-size:15px;font-weight:500}
-.ctrl output{font-family:var(--mono);color:var(--orange);font-variant-numeric:tabular-nums}
-.ctrl small{display:block;color:var(--ink-3);font-size:13px;margin-top:6px;line-height:1.45}
-input[type=range]{width:100%;margin-top:12px;accent-color:var(--orange);height:22px}
-.outs{display:grid;grid-template-columns:1fr 1fr}
-.outs>div{padding:26px 28px;border-left:1px solid var(--rule);border-top:1px solid var(--rule);min-width:0}
-.outs>div:nth-child(odd){border-left:0}
-.outs>div:nth-child(-n+2){border-top:0}
-.outs b{display:block;font-family:var(--display);font-variation-settings:"wdth" 110;font-size:clamp(28px,3.2vw,40px);font-weight:780;letter-spacing:-0.025em;line-height:1.05;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
-.outs>div.hl b{color:var(--orange)}
-.outs p{font-size:14px;color:var(--ink-2);margin-top:6px}
-.outs .wide{grid-column:1/-1;border-left:0}
-.share{height:10px;background:var(--ground-2);border-radius:999px;overflow:hidden;margin-top:12px}
-.share i{display:block;height:100%;background:var(--orange);border-radius:999px;transition:width .4s var(--ease)}
-@media (max-width:520px){.outs{grid-template-columns:1fr}.outs>div{border-left:0!important;border-top:1px solid var(--rule)!important}.outs>div:first-child{border-top:0!important}}
-
-/* market */
-.ladder{display:grid;gap:0;border-top:1px solid var(--rule)}
-.rung{display:grid;grid-template-columns:7.5em minmax(0,1fr) minmax(0,1.3fr);gap:24px;padding:24px 0;border-bottom:1px solid var(--rule);align-items:start}
-.rung .when{font-family:var(--mono);font-size:12.5px;color:var(--ink-3);letter-spacing:.06em;text-transform:uppercase;padding-top:6px}
-.rung .size{font-family:var(--display);font-variation-settings:"wdth" 112;font-size:clamp(28px,3.4vw,42px);font-weight:780;letter-spacing:-0.025em;line-height:1.05}
-.rung .size small{display:block;font-family:var(--body);font-size:14px;font-weight:500;color:var(--ink-2);letter-spacing:0;margin-top:6px;font-variation-settings:normal}
-.rung p{color:var(--ink-2);font-size:15.5px}
-.rung.now .size{color:var(--orange)}
-.rung.vision .size{color:var(--ink-2)}
-@media (max-width:780px){.rung{grid-template-columns:1fr;gap:8px}}
-.adj{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px;margin-top:40px}
-.adj .card{padding:20px}
-.adj .card p{color:var(--ink-2);font-size:14.5px;margin-top:6px}
-@media (max-width:880px){.adj{grid-template-columns:1fr 1fr}}
-@media (max-width:520px){.adj{grid-template-columns:1fr}}
-
-/* tables */
-.tbl{overflow-x:auto;border:1px solid var(--rule);border-radius:12px;background:var(--card)}
-.tbl table{width:100%;border-collapse:collapse;font-size:15px;min-width:720px}
-.tbl th,.tbl td{padding:14px 16px;border-bottom:1px solid var(--rule);text-align:left;vertical-align:top}
-.tbl thead th{font-family:var(--mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);font-weight:500}
-.tbl tbody th{font-weight:600}
-.tbl td{color:var(--ink-2)}
-.tbl tr:last-child th,.tbl tr:last-child td{border-bottom:0}
-.tbl tr.us th,.tbl tr.us td{color:var(--ink);background:var(--orange-soft)}
-.tbl tr.us th{color:var(--orange)}
-.pill{display:inline-block;font-family:var(--mono);font-size:11.5px;padding:2px 8px;border-radius:4px;border:1px solid var(--rule-2);color:var(--ink-2);white-space:nowrap}
-
-/* roadmap */
-.road{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:0;border-top:2px solid var(--rule-2);position:relative}
-.road>div{padding:26px 24px 0 0;position:relative;min-width:0}
-.road>div::before{content:"";position:absolute;top:-7px;left:0;width:12px;height:12px;border-radius:50%;background:var(--ground);border:2px solid var(--ink-3)}
-.road>div.now::before{background:var(--orange);border-color:var(--orange)}
-.road .when{font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
-.road .now .when{color:var(--orange)}
-.road h3{margin-top:10px;font-size:24px}
-.road p{color:var(--ink-2);font-size:15px;margin-top:10px}
-.road .trl{font-family:var(--mono);font-size:12.5px;color:var(--ink);margin-top:14px}
-@media (max-width:880px){.road{grid-template-columns:1fr;border-top:0;border-left:2px solid var(--rule-2);margin-left:6px}.road>div{padding:0 0 32px 26px}.road>div::before{top:4px;left:-8px}}
-
-/* ask */
-.ask{background:linear-gradient(160deg,var(--night-1),var(--night-2) 60%,var(--night-3));color:var(--night-ink);border-radius:18px;padding:clamp(24px,4vw,52px);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:44px}
-@media (max-width:880px){.ask{grid-template-columns:1fr;gap:32px}}
-.ask .label{color:#FF8A4C}
-.ask h2{color:var(--night-ink);margin-top:12px}
-.ask p{color:var(--night-ink-2)}
-.ask .kpis{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px}
-.ask .kpis span{font-family:var(--mono);font-size:12.5px;padding:6px 10px;border:1px solid var(--night-rule);border-radius:6px;color:var(--night-ink)}
-.ask .total{font-family:var(--display);font-variation-settings:"wdth" 116;font-size:clamp(46px,6.4vw,80px);font-weight:820;letter-spacing:-0.035em;line-height:1;font-variant-numeric:tabular-nums}
-.bar{display:flex;height:16px;border-radius:4px;overflow:hidden;margin:20px 0 16px;gap:2px}
-.bar i{display:block;height:100%}
-.legend{display:grid;grid-template-columns:1fr auto;gap:8px 16px;font-size:14px}
-.legend span:nth-child(odd){display:flex;gap:10px;align-items:baseline;color:var(--night-ink)}
-.legend span:nth-child(odd) i{width:10px;height:10px;border-radius:2px;flex:none;transform:translateY(1px)}
-.legend span:nth-child(even){font-family:var(--mono);font-size:13px;color:var(--night-ink-2);text-align:right;font-variant-numeric:tabular-nums}
-
-/* team */
-.team{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:40px;align-items:start}
-@media (max-width:880px){.team{grid-template-columns:1fr}}
-.me h3{font-size:30px;font-variation-settings:"wdth" 112}
-.me p{color:var(--ink-2);margin-top:10px;font-size:15.5px}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:16px}
-.tags span{font-family:var(--mono);font-size:12px;padding:4px 9px;border:1px solid var(--rule-2);border-radius:4px;color:var(--ink-2)}
-.mail{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:18px}
-.mail span{font-family:var(--mono);font-size:14px;user-select:all}
-.copy{font:inherit;font-size:13px;font-weight:600;padding:6px 12px;border-radius:6px;border:1px solid var(--rule-2);background:transparent;color:var(--ink);cursor:pointer}
-.work{display:grid;gap:0;border-top:1px solid var(--rule)}
-.work>div{display:grid;grid-template-columns:8.5em minmax(0,1fr);gap:18px;padding:18px 0;border-bottom:1px solid var(--rule)}
-.work b{font-family:var(--mono);font-size:11.5px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--orange);padding-top:3px}
-.work h3{font-size:17px}
-.work p{color:var(--ink-2);font-size:14.5px;margin-top:4px}
-@media (max-width:520px){.work>div{grid-template-columns:1fr;gap:4px}}
-footer{padding-block:32px 48px;border-top:1px solid var(--rule);font-size:13.5px;color:var(--ink-3)}
-footer .in{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
-@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}html{scroll-behavior:auto}}
-
-/* ================= LIQUID GLASS =================
-   One material for every floating surface. Rules:
-   - a glass surface has exactly one edge, and ::before draws it (no border, no inset bevel shadows);
-   - the specular follows the pointer through --mx/--my written on each element, never on :root;
-   - real refraction (glass.js builds a per-surface SVG displacement map) is Chromium-only; elsewhere it is blur + saturate. */
-:where(.lg){position:relative}
-.lg{isolation:isolate;background:var(--lg-tint);border-color:transparent;-webkit-backdrop-filter:blur(18px) saturate(175%);backdrop-filter:blur(18px) saturate(175%);box-shadow:var(--lg-shadow);transition:transform .45s var(--ease),box-shadow .45s var(--ease)}
-.lg::before{content:"";position:absolute;inset:0;border-radius:inherit;padding:1px;pointer-events:none;z-index:2;
-  background:linear-gradient(155deg,var(--lg-rim-hi) 0%,var(--lg-rim-lo) 34%,var(--lg-rim-lo) 66%,var(--lg-rim-hi) 100%);
-  -webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask:linear-gradient(#000 0 0) content-box exclude,linear-gradient(#000 0 0)}
-.lg::after{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;z-index:-1;
-  background:radial-gradient(130% 90% at var(--mx,28%) var(--my,0%),var(--lg-spec),rgba(255,255,255,0) 58%),linear-gradient(180deg,var(--lg-sheen),rgba(255,255,255,0) 42%)}
-html.refract .lg.rf-on{-webkit-backdrop-filter:var(--lg-url) blur(6px) saturate(185%) brightness(1.05);backdrop-filter:var(--lg-url) blur(6px) saturate(185%) brightness(1.05)}
-.lg.lift:hover{transform:translateY(-4px)}
-.lg.lift:active{transform:translateY(-1px) scale(.99)}
-.nav .lg{--lg-tint:var(--lg-tint-bar);--lg-rim-hi:rgba(255,255,255,.3);--lg-rim-lo:rgba(255,255,255,.05);--lg-spec:rgba(255,255,255,.1);--lg-sheen:rgba(255,255,255,.05);--lg-shadow:0 10px 30px rgba(0,0,0,.28)}
-.hud.lg,.btn.ghost.lg,.figs .lg,.ask .lg{--lg-tint:rgba(4,8,15,.38);--lg-rim-hi:rgba(255,255,255,.34);--lg-rim-lo:rgba(255,255,255,.05);--lg-spec:rgba(255,255,255,.14);--lg-sheen:rgba(255,255,255,.06);--lg-shadow:0 18px 40px rgba(0,0,0,.35)}
-.btn.ghost.lg{border-color:transparent}
-.offer.rec.lg{border-color:transparent;--lg-rim-hi:var(--orange);--lg-rim-lo:var(--orange)}
-.offer.rec.lg::before{padding:1.5px}
-@media (prefers-reduced-transparency:reduce){.lg{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:var(--card)}.nav .lg,.hud.lg{background:var(--night-1)}}
-
-/* floating nav: a glass capsule that tightens on scroll */
-.nav{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;border-bottom:0;padding-top:10px;margin-bottom:-68px;pointer-events:none;color:var(--night-ink)}
-.nav .wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
-.nav .in.lg{pointer-events:auto;max-width:1160px;border-radius:16px;padding-left:18px;padding-right:8px;transition:max-width .6s var(--ease),height .4s var(--ease)}
-.nav.compact .in.lg{max-width:1000px;height:52px}
-.nav .prog{position:absolute;left:16px;right:16px;bottom:0;height:2px;overflow:hidden;pointer-events:none;z-index:3}
-.nav .prog i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#FF6B1F,#8FD0FF);transform-origin:left;transform:scaleX(0)}
-.hero>.in{padding-top:150px}
-@media (max-width:880px){.hero>.in{padding-top:110px}}
-
-/* ambient light behind the document, so the glass has something to bend */
-.ambient{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden}
-.ambient i{position:absolute;width:70vmax;height:70vmax;border-radius:50%;will-change:transform}
-.ambient .a1{left:-25vmax;top:10vh;background:radial-gradient(circle,var(--amb1),rgba(0,0,0,0) 62%);animation:amb1 34s ease-in-out infinite alternate}
-.ambient .a2{right:-30vmax;top:-10vh;background:radial-gradient(circle,var(--amb2),rgba(0,0,0,0) 62%);animation:amb2 41s ease-in-out infinite alternate}
-.ambient .a3{left:20vw;bottom:-40vmax;background:radial-gradient(circle,var(--amb3),rgba(0,0,0,0) 62%);animation:amb3 47s ease-in-out infinite alternate}
-@keyframes amb1{to{transform:translate(30vw,40vh) scale(1.15)}}
-@keyframes amb2{to{transform:translate(-25vw,55vh) scale(.9)}}
-@keyframes amb3{to{transform:translate(-15vw,-50vh) scale(1.2)}}
-
-/* figures strip becomes a floating glass bar over the sky */
-.figs{border-top:0;background:transparent;padding-bottom:30px}
-.figs .in{display:block}
-.figs .in>div.lg{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-radius:18px;padding:2px 4px}
-.figs div.f:first-child{padding-left:18px}
-@media (max-width:880px){.figs .in>div.lg{grid-template-columns:repeat(2,minmax(0,1fr))}.figs div.f{padding-left:18px!important}.figs div.f:nth-child(odd){border-left:0}}
-
-/* glass radii */
-.card.lg,.offer.lg,.tbl.lg,.os.lg,.hud.lg{border-radius:16px}
-.calc.lg{border-radius:20px}
-.me.lg{border-radius:20px;padding:28px}
-.ask .kpis span.lg{border-color:transparent;border-radius:999px;padding:7px 12px}
-
-/* load sequence: the headline rises word by word, then the copy and the readout follow */
-.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.1em;margin-bottom:-.1em}
-.hero h1 .w>span{display:inline-block;transform:translateY(105%);animation:rise 1s var(--ease) forwards}
-@keyframes rise{to{transform:none}}
-.ld{opacity:0;transform:translateY(14px);animation:fadeup .9s var(--ease) forwards}
+.hero .hg{display:grid;grid-template-columns:1.05fr .95fr;gap:36px;align-items:center;padding-block:84px 40px;min-height:600px;position:relative}
+.hero h1{font-size:clamp(46px,7.2vw,100px);font-weight:800;letter-spacing:-0.035em;line-height:.98;margin-top:14px}
+.hero h1 .w{display:inline-block;overflow:hidden;vertical-align:bottom;padding-bottom:.08em;margin-bottom:-.08em}
+.hero h1 .w span{display:inline-block;transform:translateY(110%);animation:rise .9s var(--ease) forwards}
+.hero h1 .grad{background:linear-gradient(90deg,var(--blue),var(--teal) 60%,var(--amber));background-size:200% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:rise .9s var(--ease) forwards, shimmer 6s linear 1.2s infinite}
+@keyframes rise{to{transform:translateY(0)}}
+@keyframes shimmer{to{background-position:200% 0}}
+.hero .lede{font-size:clamp(17px,1.6vw,21px);color:var(--ink2);max-width:33em;margin-top:22px}
+.hero .cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:30px}
+.load{opacity:0;transform:translateY(16px);animation:fadeup .9s var(--ease) forwards}
 @keyframes fadeup{to{opacity:1;transform:none}}
-.d1{animation-delay:.55s}.d2{animation-delay:.7s}.d3{animation-delay:.85s}.d4{animation-delay:1s}
+.d1{animation-delay:.1s}.d2{animation-delay:.25s}.d3{animation-delay:.4s}.d4{animation-delay:.55s}.d5{animation-delay:.7s}.d6{animation-delay:.85s}
+.scene{position:relative;height:460px;border-radius:32px;overflow:hidden;background:linear-gradient(160deg,#0B1F3A 0%,#10325C 55%,#145C6B 100%);box-shadow:0 40px 80px rgba(11,31,58,.28),inset 0 1px 0 rgba(255,255,255,.18);min-width:0;opacity:0;transform:scale(.96) translateY(20px);animation:scenein 1.2s var(--ease) .3s forwards}
+@keyframes scenein{to{opacity:1;transform:none}}
+.scene canvas{width:100%;height:100%;display:block}
+.scene .chip{position:absolute;border-radius:18px;padding:12px 16px;color:#fff;font-size:13px;font-weight:600;background:rgba(255,255,255,.14);-webkit-backdrop-filter:blur(18px) saturate(160%);backdrop-filter:blur(18px) saturate(160%);box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 8px 24px rgba(0,0,0,.25);font-variant-numeric:tabular-nums;line-height:1.5;transition:transform .5s var(--ease)}
+.scene .chip b{color:#FFC266;font-size:20px;display:block;letter-spacing:-0.02em}
+.scene .c1{right:16px;bottom:16px;text-align:right}
+.scene .c2{right:16px;top:16px;text-align:right}
+section{scroll-margin-top:96px}
+.scene .c2 b{color:#2FD1B5}
+@media (max-width:860px){.hero .hg{grid-template-columns:1fr;min-height:0;padding-block:40px 28px}.scene{height:330px;order:-1}}
+.stripwrap{padding-block:8px 16px}
+.strip{border-radius:28px;display:grid;grid-template-columns:repeat(5,1fr);padding:6px}
+.strip div{padding:16px 18px;min-width:0;border-left:1px solid var(--line);display:flex;flex-direction:column;gap:2px}
+.strip div:first-child{border-left:0}
+.strip b{font-size:22px;font-weight:700;letter-spacing:-0.02em;color:var(--ink);font-variant-numeric:tabular-nums;line-height:1.15}
+.strip small{font-size:12.5px;color:var(--ink2);line-height:1.35}
+@media (max-width:980px){.strip{grid-template-columns:repeat(3,1fr)}.strip div:nth-child(4){border-left:0}.strip div:nth-child(4),.strip div:nth-child(5){border-top:1px solid var(--line)}}
+@media (max-width:560px){.strip{grid-template-columns:repeat(2,1fr)}.strip div{border-left:0;border-top:1px solid var(--line)}.strip div:nth-child(-n+2){border-top:0}.strip div:nth-child(even){border-left:1px solid var(--line)}}
+/* sections */
+section{padding-block:80px}
+.head{display:grid;gap:12px;max-width:760px;margin-bottom:44px}
+.grid{display:grid;gap:18px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}
+@media (max-width:900px){.g3,.g4{grid-template-columns:repeat(2,1fr)}}
+@media (max-width:560px){.g2,.g3,.g4{grid-template-columns:1fr}}
+.tile{border-radius:26px;padding:26px 24px;min-width:0;transition:transform .45s var(--ease),box-shadow .45s;will-change:transform}
+.tile:hover{transform:translateY(-4px)}
+.tile .n{font-size:clamp(36px,4vw,54px);font-weight:700;letter-spacing:-0.03em;font-variant-numeric:tabular-nums;line-height:1.05}
+.tile p{color:var(--ink2);font-size:15px;margin-top:8px}
+.tile .n.a{color:var(--amber)}.tile .n.t{color:var(--teal)}.tile .n.b{color:var(--blue)}
+.card{border-radius:24px;padding:26px;min-width:0;background:rgba(255,255,255,.55);border:1px solid var(--line);transition:transform .45s var(--ease)}
+.card:hover{transform:translateY(-2px)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .card{background:rgba(255,255,255,.04)}}
+:root[data-theme="dark"] .card{background:rgba(255,255,255,.04)}
+.card h3{margin-bottom:8px}
+.card p{color:var(--ink2);font-size:15.5px}
+.num{color:var(--blue);font-weight:700;font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;margin-bottom:10px}
+.reveal{opacity:1;transform:none;transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.reveal.pre{opacity:0;transform:translateY(28px) scale(.985)}
+.stagger>*{transition-delay:calc(var(--i,0) * 90ms)}
+@media (prefers-reduced-motion:reduce){.reveal.pre{opacity:1;transform:none}.field i{animation:none}.btn:hover,.tile:hover,.card:hover{transform:none}.load,.scene,.hero h1 .w span,.hero h1 .grad{animation:none;opacity:1;transform:none}.hero h1 .grad{color:transparent}}
+/* cycle */
+.cycle{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+@media (max-width:860px){.cycle{grid-template-columns:1fr}}
+.cycle .scene2{border-radius:28px;overflow:hidden;min-width:0;box-shadow:0 30px 60px rgba(11,31,58,.22)}
+.cycle svg{width:100%;height:auto;display:block}
+.phase{display:flex;gap:14px;padding:16px 18px;border-radius:18px;margin-bottom:12px;transition:transform .4s var(--ease),box-shadow .4s}
+.phase.live{transform:translateX(6px);box-shadow:var(--glass-shadow),inset 0 1px 0 var(--glass-edge),0 0 0 2px rgba(19,165,142,.35)}
+.phase b{display:block;letter-spacing:-0.01em}
+.phase small{display:block;color:var(--ink2);font-size:14px}
+.phase .ic{width:40px;height:40px;border-radius:12px;flex:none;display:grid;place-items:center;font-weight:800;color:#fff;font-size:15px;box-shadow:inset 0 1px 0 rgba(255,255,255,.4)}
+/* table */
+table{width:100%;border-collapse:collapse;font-size:15px}
+td,th{padding:12px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+tr:last-child td{border-bottom:0}
+th{font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink3);font-weight:600}
+td:first-child{color:var(--ink2)}
+td:last-child{font-variant-numeric:tabular-nums;font-weight:500}
+.tbl{overflow-x:auto}
+/* market */
+.market{display:grid;grid-template-columns:400px 1fr;gap:32px;align-items:center}
+@media (max-width:860px){.market{grid-template-columns:1fr}}
+.ring{max-width:100%;width:100%}
+.ring svg{width:100%;height:auto;display:block;overflow:visible}
+.ring g{transform-origin:210px 420px;transform-box:view-box;transition:transform 1.1s var(--ease)}
+.ring g:nth-child(2){transition-delay:.15s}.ring g:nth-child(3){transition-delay:.3s}
+.ring.pre g{transform:scale(.55)}
+.ring text{font-family:var(--font)}
+.ring .lab{font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;fill:var(--ink2)}
+.ring .val{font-size:22px;font-weight:700;letter-spacing:-0.02em;fill:var(--ink)}
+.ring .c1{fill:rgba(10,102,255,.09);stroke:rgba(10,102,255,.25)}
+.ring .c2{fill:rgba(19,165,142,.18);stroke:rgba(19,165,142,.45)}
+.mk{display:grid;gap:12px}
+.mk .card{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start}
+.dot{width:14px;height:14px;border-radius:50%;margin-top:6px;box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+/* roadmap */
+.roadwrap{position:relative}
+.road{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;position:relative}
+.road .tile{display:flex;flex-direction:column;gap:8px}
+.road .tile h3{font-size:22px}
+.road .tile p{font-size:15px;margin-top:0}
+.roadline{position:absolute;left:0;right:0;top:-26px;height:14px;pointer-events:none}
+.roadline svg{width:100%;height:14px;display:block;overflow:visible}
+.roadline path{stroke:var(--teal);stroke-width:2;fill:none;stroke-dasharray:2000;stroke-dashoffset:2000;transition:stroke-dashoffset 2.2s var(--ease)}
+.roadline.go path{stroke-dashoffset:0}
+.roadline circle{fill:var(--amber);opacity:0;transition:opacity .4s .4s}
+.roadline.go circle{opacity:1}
+.pill{display:inline-flex;align-items:center;gap:8px;border-radius:999px;padding:5px 12px;font-size:12.5px;font-weight:600;color:var(--ink2);background:rgba(127,143,160,.14);width:max-content;max-width:100%}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--teal)}
+.pill.now{color:#7A4A00;background:rgba(240,165,48,.22)}.pill.now i{background:var(--amber);box-shadow:0 0 0 0 rgba(240,165,48,.6);animation:pulse 2s infinite}
+@keyframes pulse{70%{box-shadow:0 0 0 8px rgba(240,165,48,0)}100%{box-shadow:0 0 0 0 rgba(240,165,48,0)}}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .pill.now{color:#FFD79A}}
+:root[data-theme="dark"] .pill.now{color:#FFD79A}
+@media (max-width:860px){.road{grid-template-columns:1fr}.roadline{display:none}}
+/* ask */
+.askwrap{border-radius:36px;padding:48px;color:var(--onnavy);background:linear-gradient(135deg,#0B1F3A 0%,#10325C 60%,#145C6B 100%);box-shadow:0 30px 70px rgba(11,31,58,.3),inset 0 1px 0 rgba(255,255,255,.14);position:relative;overflow:hidden}
+.askwrap::before{content:"";position:absolute;width:60%;height:120%;right:-20%;top:-40%;background:radial-gradient(circle,rgba(255,255,255,.14),rgba(255,255,255,0) 60%);pointer-events:none}
+.ask{display:grid;grid-template-columns:1fr 1fr;gap:36px;align-items:start;position:relative}
+@media (max-width:860px){.ask{grid-template-columns:1fr}.askwrap{padding:28px 20px}}
+.askwrap .eyebrow{color:#FFC266}
+.askwrap .muted{color:var(--onnavy2)}
+.bar{display:flex;height:18px;border-radius:999px;overflow:hidden;margin:18px 0 10px;box-shadow:inset 0 1px 0 rgba(255,255,255,.3);background:rgba(255,255,255,.08)}
+.bar i{display:block;height:100%;transform-origin:left;transform:scaleX(0);transition:transform 1.2s var(--ease)}
+.bar.go i{transform:scaleX(1)}
+.legend{display:grid;grid-template-columns:1fr auto;gap:7px 14px;font-size:14px;color:var(--onnavy)}
+.legend span:nth-child(odd){display:flex;align-items:center;gap:8px}
+.legend span:nth-child(even){font-variant-numeric:tabular-nums;color:var(--onnavy2)}
+.legend i{width:10px;height:10px;display:inline-block;border-radius:3px;flex:none}
+.big{font-size:clamp(44px,6vw,72px);font-weight:800;letter-spacing:-0.035em;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.kpi{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.kpi span{border-radius:999px;padding:7px 13px;font-size:13px;font-weight:600;background:rgba(255,255,255,.12);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);box-shadow:inset 0 1px 0 rgba(255,255,255,.35)}
+/* portfolio */
+.port{display:grid;grid-template-columns:1fr 1.4fr;gap:28px;align-items:start}
+@media (max-width:860px){.port{grid-template-columns:1fr}}
+.me{border-radius:28px;padding:28px;position:sticky;top:96px}
+.me h3{font-size:26px;margin-bottom:6px;letter-spacing:-0.02em}
+.me p{color:var(--ink2);font-size:15px}
+.me .tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.me .tags span{background:rgba(127,143,160,.14);padding:5px 11px;border-radius:999px;font-size:12.5px;font-weight:600;color:var(--ink)}
+.work{display:grid;gap:12px}
+.work .card{display:grid;grid-template-columns:110px 1fr;gap:16px}
+.work .card b{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--blue)}
+.work .card h3{font-size:18px}
+@media (max-width:560px){.work .card{grid-template-columns:1fr;gap:6px}}
+.copybtn{border-radius:999px;padding:7px 12px;font:inherit;font-size:13px;font-weight:600;cursor:pointer;color:var(--ink);border:0;background:rgba(127,143,160,.14)}
+footer{padding-block:28px 44px;font-size:13.5px;color:var(--ink3)}
+footer .in>div{border-radius:22px;padding:18px 22px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.sources{font-size:13px;color:var(--ink3);margin-top:26px;max-width:70em}
+.sources a{color:var(--ink3)}
 
-/* scroll reveals: only elements below the fold at load are hidden, and a timer un-hides anything missed */
-.rv{transition:opacity .9s var(--ease),transform .9s var(--ease);transition-delay:calc(var(--i,0) * 80ms)}
-.rv.pre{opacity:0;transform:translateY(26px)}
-.road{border-top-color:transparent}
-.road .line{position:absolute;left:0;right:0;top:-2px;height:2px;background:linear-gradient(90deg,var(--orange),var(--rule-2) 40%);transform-origin:left;transform:scaleX(0);transition:transform 1.8s var(--ease)}
-.road.go .line{transform:scaleX(1)}
-.road>div.line{padding:0}
-.road>div.line::before{display:none}
-@media (max-width:880px){.road .line{display:none}.road{border-left-color:var(--rule-2)}}
-.bar i{transform-origin:left;transition:transform 1.1s var(--ease)}
-.bar.pre i{transform:scaleX(0)}
-.bar i:nth-child(2){transition-delay:.1s}.bar i:nth-child(3){transition-delay:.2s}.bar i:nth-child(4){transition-delay:.3s}.bar i:nth-child(5){transition-delay:.4s}.bar i:nth-child(6){transition-delay:.5s}.bar i:nth-child(7){transition-delay:.6s}
-@media (prefers-reduced-motion:reduce){.hero h1 .w>span,.ld{transform:none;opacity:1;animation:none}.rv.pre{opacity:1;transform:none}.ambient i{animation:none}}
+/* custom cursor: exact dot + lagging glass lens ring; only on fine pointers, native cursor kept on touch */
+.cur{position:fixed;left:0;top:0;z-index:9999;pointer-events:none;opacity:0;transition:opacity .3s}
+body.cc .cur{opacity:1}
+.cur.hidden{opacity:0}
+.cur-dot{position:fixed;left:0;top:0;width:8px;height:8px;border-radius:50%;background:#fff;mix-blend-mode:difference;transform:translate(-50%,-50%);transition:width .25s var(--ease),height .25s var(--ease),opacity .25s}
+.cur-ring{position:fixed;left:0;top:0;width:38px;height:38px;border-radius:50%;border:1.5px solid rgba(11,26,46,.35);background:rgba(255,255,255,.10);-webkit-backdrop-filter:blur(6px) saturate(170%);backdrop-filter:blur(6px) saturate(170%);box-shadow:inset 0 1px 0 rgba(255,255,255,.6),0 4px 14px rgba(11,31,58,.12);transform:translate(-50%,-50%);display:grid;place-items:center;transition:width .35s var(--ease),height .35s var(--ease),background .35s,border-color .35s,box-shadow .35s}
+.cur-label{font:600 11px/1 var(--font);letter-spacing:.06em;text-transform:uppercase;color:#fff;opacity:0;transform:scale(.6);transition:opacity .25s,transform .35s var(--ease);white-space:nowrap;text-align:center}
+.cur.hover .cur-ring{width:60px;height:60px;border-color:var(--blue);background:rgba(10,102,255,.14)}
+.cur.label .cur-ring{width:84px;height:84px;border-color:transparent;background:linear-gradient(180deg,rgba(46,125,255,.92),rgba(10,102,255,.92));box-shadow:0 10px 28px rgba(10,102,255,.35),inset 0 1px 0 rgba(255,255,255,.4)}
+.cur.label .cur-label{opacity:1;transform:none}
+.cur.label .cur-dot{opacity:0}
+.cur.live .cur-ring{width:96px;height:96px;border-color:rgba(255,255,255,.5);background:rgba(11,31,58,.35)}
+.cur.live .cur-label{opacity:1;transform:none;color:#FFC266}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .cur-ring{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06)}}
+:root[data-theme="dark"] .cur-ring{border-color:rgba(255,255,255,.4);background:rgba(255,255,255,.06)}
+@media (hover:hover) and (pointer:fine){body.cc,body.cc *{cursor:none!important}}
+@media (prefers-reduced-motion:reduce){.cur-ring,.cur-dot,.cur-label{transition:none}}
+.mag{will-change:transform;transition:transform .35s var(--ease)}
 </style>
-</head>
-<body>
-<div class="ambient" aria-hidden="true"><i class="a1"></i><i class="a2"></i><i class="a3"></i></div>
-<nav class="nav" id="nav" aria-label="Sections"><div class="wrap"><div class="in lg rf">
-<a class="brand" href="#top"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 4 L19 8 L15 19 L3 13 Z" fill="#FF6B1F"/><path d="M5 4 L15 19" stroke="#04080F" stroke-width="1.6"/></svg>Kitepower</a>
-<ul id="menu"><li><a href="#problem">Problem</a></li><li><a href="#altitude">Why altitude</a></li><li><a href="#how">How it works</a></li><li><a href="#product">Product</a></li><li><a href="#calc">Savings</a></li><li><a href="#market">Market</a></li><li><a href="#risks">Risks</a></li><li><a href="#ask">The ask</a></li></ul>
-<a class="btn primary sm" href="#ask">Phase 1 funding</a>
-<div class="prog" aria-hidden="true"><i id="prog"></i></div>
-</div></div></nav>
+
+<div class="cur" id="cur" aria-hidden="true"><div class="cur-ring" id="curRing"><span class="cur-label" id="curLabel"></span></div><div class="cur-dot" id="curDot"></div></div>
+<div class="field" aria-hidden="true"><i class="o1"></i><i class="o2"></i><i class="o3"></i><i class="o4"></i></div>
+<div class="page">
+<div class="navwrap"><nav class="glass strong load d1" id="nav">
+<a class="logo" href="#top"><i></i>Kitepower</a>
+<ul id="menu"><li><a href="#problem">Problem</a></li><li><a href="#how">How it works</a></li><li><a href="#k50">K-50</a></li><li><a href="#market">Market</a></li><li><a href="#roadmap">Roadmap</a></li><li><a href="#ask">The ask</a></li><li><a href="#team">Founder</a></li></ul>
+<a class="btn primary mag" href="#ask" data-cursor="Apply">Phase 1 funding</a>
+<div class="prog" id="prog"></div>
+</nav></div>
 
 <header class="hero" id="top">
-<canvas id="sky" aria-hidden="true"></canvas>
-<div class="scrim"></div>
-<div class="in">
+<div class="in hg">
 <div>
-<p class="label ld d1">Airborne wind energy · Newfoundland and Labrador</p>
-<h1 aria-label="Replace the diesel engine with a kite."><span class="w"><span style="animation-delay:0.15s">Replace</span></span> <span class="w"><span style="animation-delay:0.22s">the</span></span> <span class="w"><span style="animation-delay:0.29s">diesel</span></span> <span class="w"><span style="animation-delay:0.36s">engine</span></span> <span class="w"><span style="animation-delay:.45s"><em>with a kite.</em></span></span></h1>
-<p class="lede ld d2">Kitepower builds containerized 50 kW kite-power plants for remote microgrids. No tower, no crane, no foundation. Set up in 48 hours, flying between 150 and 300 metres where the wind is stronger and steadier.</p>
-<div class="cta ld d3"><a class="btn primary" href="#ask">Read the $250K proposal <span class="arr">→</span></a><a class="btn ghost lg" href="#calc">Run the savings model</a></div>
+<p class="eyebrow load d2">Airborne wind energy · Newfoundland and Labrador</p>
+<h1 aria-label="Replace the diesel engine with a kite."><span class="w"><span style="animation-delay:.25s">Replace</span></span> <span class="w"><span style="animation-delay:.33s">the</span></span> <span class="w"><span style="animation-delay:.41s">diesel</span></span> <span class="w"><span style="animation-delay:.49s">engine</span></span><br><span class="w"><span class="grad" style="animation-delay:.6s">with a kite.</span></span></h1>
+<p class="lede load d4">Kitepower builds containerized 50 kW kite-power systems for remote microgrids. No tower, no crane, no foundation. Set up in 48 hours, flying at 300 m where the wind is strongest.</p>
+<div class="cta load d5"><a class="btn primary mag" href="#ask" data-cursor="Read">Read the $250K proposal</a><a class="btn glassy glass mag" href="#how" data-cursor="Fly">See how it flies</a></div>
 </div>
-<aside class="hud lg rf ld d4" aria-label="Simulated K-50 telemetry">
-<div class="top"><span class="phase" id="hPhase"><i></i><span id="hPhaseT">REEL-OUT</span></span><span style="color:var(--night-ink-2)">K-50 · SIM</span></div>
-<dl>
-<dt>Generator</dt><dd class="big" id="hPow">65.0 kW</dd>
-<dt>Tether tension</dt><dd id="hF">32.5 kN</dd>
-<dt>Reel speed</dt><dd id="hV">+2.0 m/s</dd>
-<dt>Tether out</dt><dd id="hL">240 m</dd>
-<dt>Altitude</dt><dd id="hA">154 m</dd>
-<dt>Cycle average</dt><dd>50.0 kW</dd>
-</dl>
-<p class="foot">Simulated 100-second pumping cycle shown at 10× speed: 80 s reel-out, 20 s reel-in, 40° elevation.</p>
-</aside>
+<div class="scene" aria-hidden="true" id="scene" data-cursor-live="1"><canvas id="sky"></canvas><div class="chip c1" id="chip"><b>65 kW</b>reel-out · K-50 cycle</div><div class="chip c2"><b>300 m</b>operating altitude</div></div>
 </div>
-<div class="figs"><div class="in"><div class="lg rf ld d4">
-<div class="f"><b>$1.00</b><small>per kWh: NL Hydro’s cost to serve a diesel customer</small></div>
-<div class="f"><b>$0.31</b><small>per kWh: K-50 levelized cost of energy</small></div>
-<div class="f"><b>153 MWh</b><small>clean energy per unit per year</small></div>
-<div class="f"><b>45,100 L</b><small>diesel displaced per unit per year</small></div>
-<div class="f"><b>147</b><small>Canadian communities that run on diesel</small></div>
-</div></div></div>
+<div class="in stripwrap load d6"><div class="strip glass" role="list" aria-label="Key figures">
+<div role="listitem"><b>50 GWh</b><small>isolated diesel generation in NL, 2024</small></div>
+<div role="listitem"><b>$1.00 / kWh</b><small>Hydro’s cost to serve a diesel customer</small></div>
+<div role="listitem"><b>$0.31 / kWh</b><small>K-50 levelized cost of energy</small></div>
+<div role="listitem"><b>153 MWh</b><small>clean energy per unit per year</small></div>
+<div role="listitem"><b>147</b><small>Canadian communities that rely on diesel</small></div>
+</div></div>
 </header>
 
-<main>
 <section id="problem"><div class="in">
-<div class="head rv"><p class="label o">The problem</p><h2>Twenty communities, one dollar per kilowatt-hour</h2><p class="lede">NL Hydro runs 20 isolated diesel systems on the Labrador coast and the Island’s south coast. Customers pay 15 to 23 cents. The real cost is close to a dollar, and Island ratepayers cover the gap.</p></div>
-<div class="cost pre" id="cost" role="img" aria-label="Cost per kilowatt-hour: diesel cost to serve $1.00, diesel fuel alone $0.49, K-50 levelized cost $0.31, customer rate 15 to 23 cents">
-<div class="row"><span>Cost to serve a diesel customer</span><div class="track"><i style="width:100%;background:var(--neg)"></i></div><span class="val">$1.00</span></div>
-<div class="row"><span>Diesel fuel alone, before plant and labour</span><div class="track"><i style="width:49%;background:var(--neg);opacity:.7"></i></div><span class="val">$0.49</span></div>
-<div class="row"><span><strong style="color:var(--ink)">K-50 levelized cost</strong></span><div class="track"><i style="width:31%;background:var(--orange)"></i></div><span class="val" style="color:var(--orange)">$0.31</span></div>
-<div class="row"><span>What the customer pays</span><div class="track"><i style="left:15%;width:8%;background:var(--ice)"></i></div><span class="val">$0.15–0.23</span></div>
-<div class="axis" aria-hidden="true"><div></div><div><span style="left:0">$0</span><span style="left:25%">0.25</span><span style="left:50%">0.50</span><span style="left:75%">0.75</span><span style="left:100%">$1.00</span></div><div></div></div>
+<div class="head reveal"><p class="eyebrow">The problem</p><h2>Twenty communities, one dollar per kilowatt-hour</h2><p class="muted">NL Hydro runs 20 isolated diesel systems on the Labrador coast and the south coast of the Island. Customers pay 15 to 23 cents; the cost to serve is near a dollar. Island ratepayers cover the rest.</p></div>
+<div class="grid g4 stagger">
+<div class="tile glass reveal" style="--i:0"><div class="n b" data-count="50" data-suffix=" GWh">0</div><p>diesel generation on NL’s 20 isolated systems in 2024, from 38 MW of plant</p></div>
+<div class="tile glass reveal" style="--i:1"><div class="n b" data-count="29" data-prefix="$" data-suffix="M">0</div><p>diesel fuel bill in 2023, about 49 cents per kWh before plant or labour</p></div>
+<div class="tile glass reveal" style="--i:2"><div class="n a" data-count="42" data-prefix="$" data-suffix="M">0</div><p>annual rural deficit cross-subsidised by Island customers</p></div>
+<div class="tile glass reveal" style="--i:3"><div class="n t" data-count="147">0</div><p>Canadian remote communities relying on diesel, burning over 740 million litres a year</p></div>
 </div>
-<div class="stats">
-<div><b data-count="50" data-suf=" GWh">50 GWh</b><p>diesel generation on NL’s 20 isolated systems in 2024, from 38 MW of plant</p></div>
-<div><b data-count="29" data-pre="$" data-suf="M">$29M</b><p>diesel fuel bill in 2023, about 49 cents per kWh</p></div>
-<div><b data-count="42" data-pre="$" data-suf="M">$42M</b><p>annual rural deficit cross-subsidised by Island customers</p></div>
-<div><b data-count="740" data-suf="M L">740M L</b><p>diesel burned each year by Canada’s 147 remote communities</p></div>
-</div>
-<p class="src">Sources: <a href="https://nlhydro.com/wp-content/uploads/2025/07/Sustainability-Report-2024-FINAL.pdf">NL Hydro Sustainability Report 2024</a>, <a href="https://nlhydro.com/wp-content/uploads/2024/01/Annual-Financial-Report-2023-FA-WEB.pdf">Annual Report 2023</a>, <a href="https://nlhydro.com/wp-content/uploads/2022/05/Final-Response-PB-344-2022_Redacted.pdf">response to the Public Utilities Board PB-344-2022</a>; <a href="https://www.pembina.org/sites/default/files/2026-04/Diesel_Reduction_Progress_II.pdf">Pembina Institute, Diesel Reduction Progress II (2026)</a>. K-50 cost is a projection: 8% discount rate over 20 years.</p>
-</div></section>
-
-<section id="altitude"><div class="in">
-<div class="head rv"><p class="label o">Why altitude</p><h2>The wind a tower can’t reach</h2><p class="lede">Wind speed rises with height, and power rises with the cube of wind speed. A kite reaches the stronger air for a fraction of the steel, because the tether carries the load instead of a tower.</p></div>
-<div class="two">
-<div class="card alt lg rv"><svg id="prof" viewBox="0 0 520 380" role="img" aria-label="Wind speed profile by height using the one-seventh power law. At 300 m wind is 21 percent faster than at an 80 m turbine hub, giving about 76 percent more power."></svg>
-<p class="note">Illustrative: textbook one-seventh power law, neutral atmosphere, relative to an 80 m turbine hub. Phase 1 LiDAR measures the real profile at the test site.</p></div>
-<div class="facts rv">
-<div><b>+21%</b><p><strong>Faster wind at 300 m</strong> than at a typical 80 m turbine hub.</p></div>
-<div><b>+76%</b><p><strong>More power in that wind</strong>, because power scales with the cube of speed.</p></div>
-<div><b>−90%</b><p><strong>Less material</strong> than a tower turbine of the same output: a fabric wing, a tether and a ground winch.</p></div>
-<div><b>48 h</b><p><strong>From shipping container to first power</strong>, with no crane or foundation. That matters where the only access is a summer ferry or an airstrip.</p></div>
-</div>
-</div>
+<p class="sources">Sources: <a href="https://nlhydro.com/wp-content/uploads/2025/07/Sustainability-Report-2024-FINAL.pdf">NL Hydro Sustainability Report 2024</a>, <a href="https://nlhydro.com/wp-content/uploads/2024/01/Annual-Financial-Report-2023-FA-WEB.pdf">Annual Report 2023</a>, <a href="https://nlhydro.com/wp-content/uploads/2022/05/Final-Response-PB-344-2022_Redacted.pdf">response to the Public Utilities Board PB-344-2022</a>; <a href="https://www.pembina.org/sites/default/files/2026-04/Diesel_Reduction_Progress_II.pdf">Pembina Institute, Diesel Reduction Progress II (2026)</a>.</p>
 </div></section>
 
 <section id="how"><div class="in">
-<div class="head rv"><p class="label o">How it works</p><h2>The pumping cycle</h2><p class="lede">The wing flies fast figure-eights across the wind, pulling tether off a drum that spins a generator. Then it depowers, glides back, and a motor reels it in using a fraction of the energy.</p></div>
-<div class="two">
-<div class="card cyc lg rv"><svg viewBox="0 0 520 300" role="img" aria-label="Power over one 100-second cycle: plus 65 kilowatts for 80 seconds, minus 10 kilowatts for 20 seconds, net 50 kilowatts average">
-<g id="cycg"></g>
+<div class="head reveal"><p class="eyebrow">How it works</p><h2>The pumping cycle</h2><p class="muted">A soft wing flies figure-eights crosswind at high tension, reeling tether off a drum that drives a generator. Then it depowers and glides back while a motor reels in. Net output: 50 kW average from 90 percent less material than a tower turbine.</p></div>
+<div class="cycle">
+<div class="scene2 reveal" data-cursor-live="2">
+<svg viewBox="0 0 640 400" role="img" aria-label="Animated pumping cycle: a kite reels out from a ground station under power, then reels in">
+<defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#0B1F3A"/><stop offset="1" stop-color="#145C6B"/></linearGradient><linearGradient id="gk" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#2FD1B5"/><stop offset="1" stop-color="#FFC266"/></linearGradient></defs>
+<rect width="640" height="400" fill="url(#g1)"/>
+<g id="wind" stroke="#F2F5F9" stroke-opacity=".18"><line x1="0" y1="60" x2="40" y2="60"/><line x1="120" y1="110" x2="170" y2="110"/><line x1="260" y1="40" x2="300" y2="40"/><line x1="420" y1="90" x2="480" y2="90"/><line x1="540" y1="200" x2="590" y2="200"/><line x1="60" y1="240" x2="110" y2="240"/><line x1="360" y1="280" x2="410" y2="280"/></g>
+<rect y="350" width="640" height="50" fill="#1C3A4A"/>
+<rect x="40" y="300" width="110" height="50" rx="10" fill="#F2F5F9"/>
+<circle id="drum" cx="95" cy="300" r="18" fill="#F0A530"/>
+<path id="fig8" d="M330 150 C 400 60, 560 60, 560 150 S 400 240, 330 150 S 100 240, 100 150 S 260 60, 330 150 Z" fill="none" stroke="#2FD1B5" stroke-opacity=".4" stroke-width="4" stroke-dasharray="8 8"/>
+<line id="tether" x1="95" y1="300" x2="330" y2="150" stroke="#F2F5F9" stroke-width="3"/>
+<circle id="pulse" r="5" fill="#FFC266"/>
+<g id="kite"><path d="M-28 -6 L 10 -22 L 28 6 L -8 20 Z" fill="url(#gk)"/><path d="M-28 -6 L 28 6" stroke="#0B1F3A" stroke-width="2"/></g>
+<text id="ph" x="320" y="382" text-anchor="middle" font-family="Inter, Arial" font-size="15" font-weight="700" fill="#F2F5F9">REEL-OUT · 65 kW</text>
 </svg>
-<p class="note">One cycle, to scale. (80 s × 65 kW − 20 s × 10 kW) ÷ 100 s = 50 kW net.</p></div>
-<ol class="steps rv">
-<li><div><h3>Reel-out · 80 seconds</h3><p>Crosswind flight at high tension drives the generator at 65 kW while 160 m of tether pays out.</p></div></li>
-<li><div><h3>Reel-in · 20 seconds</h3><p>The wing pitches to near-zero pull and the winch recovers the tether, drawing 10 kW.</p></div></li>
-<li><div><h3>Repeat, with a battery smoothing the output</h3><p>A small buffer battery turns the pulse into steady power for the grid. Proven at 20 to 200 kW by TU Delft and European kite-power firms. Loyd (1980) gives the physics: power scales with wing area, the cube of wind speed and the square of lift-to-drag.</p></div></li>
-</ol>
+</div>
+<div class="reveal">
+<div class="phase glass" id="p1"><div class="ic" style="background:linear-gradient(135deg,#F0A530,#E07B2A)">1</div><div><b>Reel-out, 80 s of every 100 s</b><small>Crosswind flight at high tension drives the generator at 65 kW.</small></div></div>
+<div class="phase glass" id="p2"><div class="ic" style="background:linear-gradient(135deg,#7E8CA0,#4E5E72)">2</div><div><b>Reel-in, 20 s</b><small>The wing depowers and glides back; the motor draws 10 kW to retrieve tether.</small></div></div>
+<div class="phase glass"><div class="ic" style="background:linear-gradient(135deg,#13A58E,#0A66FF)">=</div><div><b>Net: 50 kW average</b><small>Proven at 20 to 200 kW by TU Delft, Kitepower B.V. and SkySails Power. Loyd (1980) gives the physics: power scales with wing area, the cube of wind speed and the square of lift-to-drag.</small></div></div>
+</div>
 </div>
 </div></section>
 
-<section id="product"><div class="in">
-<div class="head rv"><p class="label o">The product</p><h2>K-50, and the software that flies it</h2><p class="lede">One 20-foot container holds the wing, ground station and controls. Three choices are specific to our climate: a heated drum and ice-shedding wing coating, an automated mast launch that needs no crew, and a microgrid controller that leaves the utility operator in charge.</p></div>
-<div class="two">
-<div class="card lg rv"><table class="spec">
-<tr><th>Nominal power</th><td>50 kW cycle average<br>65 kW reel-out</td></tr>
-<tr><th>Wing</th><td>40 m² soft inflatable,<br>ice-shedding coating</td></tr>
-<tr><th>Tether</th><td>450 m Dyneema</td></tr>
-<tr><th>Operating altitude</th><td>150 to 300 m</td></tr>
-<tr><th>Wind range</th><td>cut-in 3 m/s · rated 8 m/s<br>cut-out 18 m/s</td></tr>
-<tr><th>Footprint</th><td>20 × 20 m pad<br>400 m safety radius</td></tr>
-<tr><th>Capacity factor target</th><td>35% at NL coastal sites</td></tr>
-<tr><th>Annual energy</th><td>153 MWh per unit</td></tr>
-<tr><th>Diesel displaced</th><td>45,100 L · 121 t CO2e / yr</td></tr>
+<section id="k50"><div class="in">
+<div class="head reveal"><p class="eyebrow">The product</p><h2>Kitepower K-50</h2><p class="muted">One 20-foot container holds the wing, the ground station and the controls. Three choices are specific to our climate: a heated tether drum and de-icing wing coating, an automated mast launch that needs no crew, and a microgrid controller that leaves the Hydro operator in charge.</p></div>
+<div class="grid g2">
+<div class="card tbl reveal"><table>
+<tr><th>Parameter</th><th>K-50</th></tr>
+<tr><td>Nominal power</td><td>50 kW cycle average (65 kW reel-out)</td></tr>
+<tr><td>Wing</td><td>40 m² soft inflatable, icing-tolerant coating</td></tr>
+<tr><td>Tether and altitude</td><td>300 m Dyneema; 150 to 300 m operating</td></tr>
+<tr><td>Wind range</td><td>cut-in 3 m/s · rated 8 m/s · cut-out 18 m/s</td></tr>
+<tr><td>Footprint</td><td>20 × 20 m pad, 400 m safety radius</td></tr>
+<tr><td>Capacity factor target</td><td>35% at NL coastal sites</td></tr>
+<tr><td>Annual energy</td><td>153 MWh per unit</td></tr>
+<tr><td>Diesel displaced</td><td>45,100 L and 121 t CO2e per year</td></tr>
 </table></div>
-<div style="display:grid;gap:14px;min-width:0">
-<p class="label">Three ways to buy</p>
-<div class="offers" style="grid-template-columns:1fr">
-<div class="offer rec lg lift rv"><span class="tag">Recommended</span><h3>Power purchase agreement</h3><p>We own, fly and maintain the plant. The community or utility pays only for kilowatt-hours delivered, priced under its avoided diesel cost. No capital, no new skills on site.</p></div>
-<div class="offer lg lift rv"><h3>Lease · $55,000 a year</h3><p>Operations and maintenance included. Fits utility budgets that can’t take on new assets.</p></div>
-<div class="offer lg lift rv"><h3>Purchase · $275,000</h3><p>$75,000 to $92,000 a year in fuel and avoided cost; simple payback of 3.8 years.</p></div>
+<div class="grid stagger" style="gap:14px">
+<div class="tile glass reveal" style="--i:0"><div class="num">LCOE</div><h3>$0.31 per kWh</h3><p>versus $0.49 diesel fuel-only and about $1.00 full cost to serve. 8 percent discount rate over 20 years.</p></div>
+<div class="tile glass reveal" style="--i:1"><div class="num">Customer value</div><h3>$75,000 to $92,000 a year</h3><p>fuel and avoided-cost savings per unit; simple payback of 3.8 years on a $275,000 purchase, or a $55,000 per year lease.</p></div>
+<a class="tile glass reveal" style="--i:2;text-decoration:none;color:inherit;display:block" href="https://claude.ai/artifact/7T28Yo9QPqWmSGBpkJvZXJ" data-cursor="Open"><div class="num">Digital twin</div><h3>Open the interactive model</h3><p>Set wind, wing area and site and watch power, annual energy, diesel displaced and payback update live.</p></a>
 </div>
 </div>
-</div>
-<div class="os lg rv">
-<div><h3>Autopilot</h3><p>Launch, figure-eights and landing with no pilot on site.</p></div>
-<div><h3>Ice watch</h3><p>Forecast-driven landing before icing, heated drum on standby.</p></div>
-<div><h3>Fleet operations</h3><p>One remote control room in St. John’s watches every unit.</p></div>
-<div><h3>Wind atlas</h3><p>Every flight logs wind at 150 to 300 m, data no one else has for these coasts.</p></div>
-</div>
-<p class="note" style="margin-top:16px">Want to try other inputs? <a href="https://claude.ai/artifact/7T28Yo9QPqWmSGBpkJvZXJ" style="color:var(--orange)">Open the interactive digital twin →</a></p>
-</div></section>
-
-<section id="calc"><div class="in">
-<div class="head rv"><p class="label o">Savings model</p><h2>What a K-50 fleet saves a community</h2><p class="lede">Move the sliders. Every figure comes from the K-50 numbers above, so you can check the arithmetic yourself.</p></div>
-<div class="calc lg rf rv">
-<div class="ctrls">
-<div class="ctrl"><label for="u">Units installed <output id="uo" for="u">1</output></label><input type="range" id="u" min="1" max="24" step="1" value="1"><small>Year-5 target for NL is 24 units.</small></div>
-<div class="ctrl"><label for="cf">Capacity factor <output id="cfo" for="cf">35%</output></label><input type="range" id="cf" min="20" max="45" step="1" value="35"><small>Share of the year the plant runs at full output. 35% is the NL coastal target; Phase 1 measures it.</small></div>
-<div class="ctrl"><label for="dp">Delivered diesel cost <output id="dpo" for="dp">$1.66/L</output></label><input type="range" id="dp" min="1.20" max="3.00" step="0.02" value="1.66"><small>$1.66/L matches NL Hydro’s 49 cents per kWh of fuel. Fly-in sites pay far more.</small></div>
-</div>
-<div class="outs" aria-live="polite">
-<div class="hl"><b id="oS">$75,000</b><p>fuel cost avoided per year</p></div>
-<div><b id="oE">153 MWh</b><p>clean energy per year</p></div>
-<div><b id="oL">45,100 L</b><p>diesel not burned</p></div>
-<div><b id="oC">121 t</b><p>CO2e avoided</p></div>
-<div class="wide"><p style="margin-top:0">Share of NL’s 50 GWh isolated diesel generation: <strong id="oP" style="color:var(--ink)">0.3%</strong></p><div class="share"><i id="oPb" style="width:.3%"></i></div></div>
-</div>
-</div>
-<p class="note">Energy = units × 50 kW × 8,760 h × capacity factor. Diesel = 0.294 L per kWh (NL Hydro fleet). CO2e = 2.68 kg per litre.</p>
 </div></section>
 
 <section id="market"><div class="in">
-<div class="head rv"><p class="label o">Market</p><h2>Start where power costs a dollar. Then go everywhere diesel is.</h2><p class="lede">Utility-scale airborne wind has to beat cheap grid power, and that is where earlier efforts struggled. Remote diesel grids already pay three times our cost. That is the entry point.</p></div>
-<div class="ladder">
-<div class="rv rung now"><span class="when">Years 1–5</span><div class="size">20 systems<small>Newfoundland and Labrador</small></div><p>50 GWh a year, about 326 K-50 equivalents. Target 24 units by Year 5, seven percent of isolated diesel generation. First sites: Ramea, Black Tickle, Makkovik.</p></div>
-<div class="rv rung"><span class="when">Years 4–8</span><div class="size">147 communities<small>Remote Canada</small></div><p>More than 740 million litres of diesel a year across Nunavut, the northern territories and remote First Nations. The federal Wah-ila-toos hub committed $300 million to diesel reduction through 2027.</p></div>
-<div class="rv rung"><span class="when">Years 6–10</span><div class="size">22.5 GW<small>Isolated diesel grids worldwide</small></div><p>Across 220 states and regions, most systems under 1 MW. At nameplate that is 450,000 K-50 equivalents, and a container ships to any port, barge or airstrip.</p></div>
-<div class="rv rung vision"><span class="when">Beyond</span><div class="size">K-500 and up<small>Offshore and utility scale</small></div><p>A fleet flying thousands of hours in the hardest weather becomes the data and autonomy base for larger wings, offshore platforms and floating sites, once the small market has proven the machine.</p></div>
+<div class="head reveal"><p class="eyebrow">Market</p><h2>NL first, then Canada, then the world’s islands</h2></div>
+<div class="market">
+<div class="ring reveal" id="ring"><svg viewBox="0 0 420 440" role="img" aria-label="Nested circles: global isolated diesel capacity 22.5 GW, Canada 147 diesel communities, Newfoundland and Labrador 20 isolated systems">
+<defs><linearGradient id="gn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#10325C"/><stop offset="1" stop-color="#0B1F3A"/></linearGradient></defs>
+<g><circle class="c1" cx="210" cy="220" r="200" stroke-width="1.5"/><text class="lab" x="210" y="52" text-anchor="middle">Global isolated diesel</text><text class="val" x="210" y="80" text-anchor="middle">22.5 GW</text></g>
+<g><circle class="c2" cx="210" cy="290" r="130" stroke-width="1.5"/><text class="lab" x="210" y="188" text-anchor="middle">Canada</text><text class="val" x="210" y="216" text-anchor="middle">147 communities</text></g>
+<g><circle cx="210" cy="352" r="68" fill="url(#gn)"/><text class="lab" x="210" y="346" text-anchor="middle" style="fill:#B9C8D6">Newfoundland</text><text class="val" x="210" y="372" text-anchor="middle" style="fill:#fff">20 systems</text></g>
+</svg></div>
+<div class="mk stagger">
+<div class="card reveal" style="--i:0"><div class="dot" style="background:var(--navy)"></div><div><h3>Beachhead: NL isolated systems</h3><p>20 systems, 50 GWh a year, about 326 K-50 equivalents. Target 24 units by Year 5, seven percent of isolated diesel generation. First sites: Ramea, Black Tickle, Makkovik.</p></div></div>
+<div class="card reveal" style="--i:1"><div class="dot" style="background:var(--teal)"></div><div><h3>Canada’s remote communities</h3><p>147 communities rely on diesel, burning more than 740 million litres a year. The federal Wah-ila-toos hub committed $300 million to diesel reduction through 2027.</p></div></div>
+<div class="card reveal" style="--i:2"><div class="dot" style="background:var(--blue)"></div><div><h3>Global isolated diesel grids</h3><p>More than 22.5 GW installed across 220 states and regions, most systems under 1 MW. A containerized plant fits ports, barges and mine sites.</p></div></div>
 </div>
-<div class="adj">
-<div class="card lg lift rv"><h3>Mines and camps</h3><p>Remote mines burn diesel for decades and pay fly-in prices for it.</p></div>
-<div class="card lg lift rv"><h3>Offshore platforms</h3><p>Newfoundland’s own offshore industry needs lower-emission power at sea.</p></div>
-<div class="card lg lift rv"><h3>Arctic stations</h3><p>Research and defence sites where every litre arrives by air.</p></div>
-<div class="card lg lift rv"><h3>Disaster relief</h3><p>A container that makes power in 48 hours after a storm cuts a grid.</p></div>
 </div>
-</div></section>
-
-<section id="compete"><div class="in">
-<div class="head rv"><p class="label o">Landscape</p><h2>Proven abroad. Nobody builds it for the cold.</h2><p class="lede">The physics is settled; the open question is a product for icy, remote, crew-less sites, sold as power. The European firms are possible partners or wing suppliers as much as competitors.</p></div>
-<div class="tbl lg rv"><table>
-<thead><tr><th>Company</th><th>Approach</th><th>Focus</th><th>Status</th></tr></thead>
-<tbody>
-<tr><th>Makani (Alphabet)</th><td>Rigid wing, generators on board</td><td>Utility scale, offshore</td><td><span class="pill">Wound down 2020</span></td></tr>
-<tr><th>SkySails Power (Germany)</th><td>Soft wing, ground generator</td><td>Commercial kite-power systems</td><td><span class="pill">Selling</span></td></tr>
-<tr><th>Kitepower B.V. (Netherlands)</th><td>Soft wing, ground generator</td><td>Mobile off-grid units</td><td><span class="pill">Selling</span></td></tr>
-<tr class="us"><th>Kitepower NL (us)</th><td>Soft wing, ground generator, built for icing and −25&nbsp;°C</td><td>Atlantic Canada and Arctic diesel grids, sold as power</td><td><span class="pill">Phase 1</span></td></tr>
-</tbody></table></div>
-</div></section>
-
-<section id="risks"><div class="in">
-<div class="head rv"><p class="label o">Risks</p><h2>What could stop us, and how Phase 1 answers it</h2></div>
-<div class="tbl lg rv"><table>
-<thead><tr><th>Risk</th><th>Why it matters</th><th>How Phase 1 retires it</th></tr></thead>
-<tbody>
-<tr><th>Icing</th><td>Ice adds weight to the wing and tether and ruins the lift.</td><td>Heated drum, ice-shedding coating, forecast-driven landings. Winter flight test at −25&nbsp;°C.</td></tr>
-<tr><th>Airspace</th><td>A tethered aircraft needs Transport Canada approval.</td><td>File in month 1. Sites away from aerodromes, aviation-orange marking and lighting.</td></tr>
-<tr><th>Autonomy</th><td>Remote sites have no trained pilot.</td><td>Automated mast launch and landing, logged across 100 flight hours.</td></tr>
-<tr><th>Wind resource</th><td>A 35% capacity factor is still a target.</td><td>LiDAR and a met mast measure the 150 to 300 m profile at the test site.</td></tr>
-<tr><th>Community fit</th><td>A 400 m safety radius is large in a small outport.</td><td>30 customer interviews, community sessions, two letters of intent and one MOU.</td></tr>
-</tbody></table></div>
 </div></section>
 
 <section id="roadmap"><div class="in">
-<div class="head rv"><p class="label o">Roadmap</p><h2>From a 5 kW demonstrator to a fleet on the Labrador coast</h2></div>
-<div class="road" id="road"><div class="line" aria-hidden="true"></div>
-<div class="now"><p class="when">Phase 1 · 18 months · this application</p><h3>Prove it flies here</h3><p>$312,500 budget, $250,000 requested. K-5 demonstrator, 100 flight hours at an NL coastal site, winter icing test, Transport Canada file, two letters of intent.</p><p class="trl">TRL 2 → 5</p></div>
-<div><p class="when">Phase 2 · years 2 to 3</p><h3>Pilot on a real grid</h3><p>$1.8M. First K-50 on an NL isolated system, Ramea preferred, with 12 months of monitored operation alongside NL Hydro. Green Transition Fund and federal diesel-reduction funding, $750K seed.</p><p class="trl">TRL 7</p></div>
-<div><p class="when">Phase 3 · years 4 to 5</p><h3>Fleet and export</h3><p>K-50 and K-100 across Labrador and Island systems, then Nunavut and northern Canada, then island states. 24 units, $4.3M revenue, 20 NL jobs, $4M Series A.</p><p class="trl">TRL 9</p></div>
+<div class="head reveal"><p class="eyebrow">Roadmap</p><h2>From a 5 kW demonstrator to a fleet on the Labrador coast</h2></div>
+<div class="roadwrap" style="padding-top:30px">
+<div class="roadline" id="roadline" aria-hidden="true"><svg viewBox="0 0 1000 14" preserveAspectRatio="none"><path d="M8 7 L 992 7"/><circle cx="8" cy="7" r="5"/><circle cx="500" cy="7" r="5"/><circle cx="992" cy="7" r="5"/></svg></div>
+<div class="road stagger">
+<div class="tile glass strong reveal" style="--i:0"><span class="pill now"><i></i>Phase 1 · 18 months · this application</span><h3>Prove it flies here</h3><p>$312,500 budget, $250,000 requested. K-5 demonstrator, 100 flight hours at an NL coastal site, winter icing test, Transport Canada file, two letters of intent. TRL 2 to 5.</p></div>
+<div class="tile glass reveal" style="--i:1"><span class="pill"><i></i>Phase 2 · years 2 to 3</span><h3>Pilot on a real grid</h3><p>$1.8M. First K-50 on an NL isolated system, Ramea preferred, with 12 months of monitored operation alongside NL Hydro. Green Transition Fund and federal diesel-reduction funding, $750K seed. TRL 7.</p></div>
+<div class="tile glass reveal" style="--i:2"><span class="pill"><i></i>Phase 3 · years 4 to 5</span><h3>Fleet and export</h3><p>K-50 and K-100 across Labrador and Island systems, then Nunavut and northern Canada, then island states. 24 units, $4.3M revenue, 20 NL jobs, $4M Series A.</p></div>
+</div>
 </div>
 </div></section>
 
-<section id="ask"><div class="in">
+<section id="ask"><div class="in"><div class="askwrap reveal">
 <div class="ask">
 <div>
-<p class="label">The ask</p>
-<h2>$250,000 for Phase 1</h2>
-<p style="margin-top:16px">Eighteen months to take Kitepower from concept to a flight-proven, winter-tested demonstrator with signed customer intent. We put in $62,500 (20 percent) in cash and in-kind labour. The realistic stack is the JGRD Business Growth Program, NRC IRAP and Mitacs Accelerate Entrepreneur, with Genesis Centre as incubator.</p>
-<div class="kpis"><span class="lg">100 flight hours</span><span class="lg">≥ 3.5 kW at 8 m/s</span><span class="lg">Flies at −25&nbsp;°C</span><span class="lg">2 LOIs · 1 MOU</span><span class="lg">30 interviews</span><span class="lg">TRL 5 report</span></div>
+<p class="eyebrow">The ask</p>
+<h2 style="margin-top:10px;color:#fff">$250,000 for Phase 1</h2>
+<p class="muted" style="margin-top:14px">Eighteen months to take Kitepower from concept to a flight-proven, winter-tested demonstrator with signed customer intent. We contribute $62,500 (20 percent) in cash and in-kind labour. The realistic stack is the JGRD Business Growth Program, NRC IRAP and Mitacs Accelerate Entrepreneur, with Genesis Centre as incubator.</p>
+<div class="kpi"><span>100 flight hours</span><span>≥ 3.5 kW at 8 m/s</span><span>Operates at −25 °C</span><span>2 LOIs, 1 MOU</span><span>30 interviews</span><span>TRL 5 report</span></div>
 </div>
 <div>
-<div class="total" data-count="312500" data-pre="$" data-sep="1">$312,500</div>
-<p>Phase 1 budget · $250,000 requested</p>
-<div class="bar" id="bar" aria-hidden="true"><i style="width:44%;background:#43C2AC"></i><i style="width:20%;background:#FF6B1F"></i><i style="width:10.4%;background:#8FD0FF"></i><i style="width:5.6%;background:#A9B7C7"></i><i style="width:7.2%;background:#5E7D99"></i><i style="width:4%;background:#3D5A75"></i><i style="width:8.8%;background:#26394D"></i></div>
+<div class="big" data-count="312500" data-prefix="$" data-sep="1">$0</div>
+<p class="muted">Phase 1 budget · $250,000 requested</p>
+<div class="bar" id="bar" aria-hidden="true"><i style="width:44%;background:#2FD1B5;transition-delay:.0s"></i><i style="width:20%;background:#F0A530;transition-delay:.15s"></i><i style="width:10%;background:#5AA2FF;transition-delay:.3s"></i><i style="width:6%;background:#9AA8B5;transition-delay:.4s"></i><i style="width:7%;background:#C8D3DA;transition-delay:.5s"></i><i style="width:4%;background:#7E8EA0;transition-delay:.6s"></i><i style="width:9%;background:#3A4F6B;transition-delay:.7s"></i></div>
 <div class="legend">
-<span><i style="background:#43C2AC"></i>Personnel: founder, mechatronics contractor, 2 Mitacs interns</span><span>$137,500</span>
-<span><i style="background:#FF6B1F"></i>K-5 demonstrator hardware and spares</span><span>$62,500</span>
-<span><i style="background:#8FD0FF"></i>Test site, LiDAR and met masts, logistics</span><span>$32,500</span>
-<span><i style="background:#A9B7C7"></i>Regulatory, insurance, safety case</span><span>$17,500</span>
-<span><i style="background:#5E7D99"></i>Customer discovery and community engagement</span><span>$22,500</span>
-<span><i style="background:#3D5A75"></i>IP, legal, incorporation, trademark clearance</span><span>$12,500</span>
-<span><i style="background:#26394D;outline:1px solid rgba(238,243,248,.3)"></i>Contingency</span><span>$27,500</span>
+<span><i style="background:#2FD1B5"></i>Personnel: founder, mechatronics contractor, 2 Mitacs interns</span><span>$137,500</span>
+<span><i style="background:#F0A530"></i>K-5 demonstrator hardware and spares</span><span>$62,500</span>
+<span><i style="background:#5AA2FF"></i>Test site, LiDAR and met masts, logistics</span><span>$32,500</span>
+<span><i style="background:#9AA8B5"></i>Regulatory, insurance, safety case</span><span>$17,500</span>
+<span><i style="background:#C8D3DA"></i>Customer discovery and community engagement</span><span>$22,500</span>
+<span><i style="background:#7E8EA0"></i>IP, legal, incorporation, trademark clearance</span><span>$12,500</span>
+<span><i style="background:#3A4F6B"></i>Contingency</span><span>$27,500</span>
 </div>
 </div>
 </div>
-</div></section>
+</div></div></section>
 
 <section id="team"><div class="in">
-<div class="head rv"><p class="label o">Founder</p><h2>A Newfoundlander with hydrogen-plant engineering behind him</h2></div>
-<div class="team">
-<div class="me lg rv">
+<div class="head reveal"><p class="eyebrow">Founder and portfolio</p><h2>A Newfoundlander with hydrogen-plant engineering behind him</h2></div>
+<div class="port">
+<div class="me glass strong reveal">
 <h3>Yousha Ahmed</h3>
 <p>Founder. Born and raised in Newfoundland and Labrador; Medical Sciences student at Western University. Process engineering, safety studies, energy systems research and software, with customer discovery experience from the i2i Skills program.</p>
 <div class="tags"><span>P&amp;ID design</span><span>HAZID / HAZOP</span><span>PEM electrolysis</span><span>Exergy analysis</span><span>CO2 capture</span><span>MATLAB</span><span>Customer discovery</span><span>Full-stack software</span></div>
-<div class="mail"><span id="mail">yousha.ahmed55@gmail.com</span><button class="copy" id="copy" type="button">Copy</button></div>
+<p style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span id="mail" style="color:var(--ink);user-select:all;font-weight:500">yousha.ahmed55@gmail.com</span><button class="copybtn mag" id="copy" type="button" data-cursor="Copy">Copy</button></p>
 </div>
-<div class="work">
-<div><b>Engineering</b><div><h3>1.25 MW PEM hydrogen electrolyser design package</h3><p>Authored the 7-sheet P&amp;ID, 3-sheet PFD and general-arrangement drawings for the WESI project (Hygreen ELY1250) at Bluedrop ISM, through multiple revisions.</p></div></div>
-<div><b>Process safety</b><div><h3>HAZID and HAZOP, 16 nodes</h3><p>Led a full-guideword HAZOP and HAZID on the electrolyser P&amp;ID with a 5×5 risk matrix and before/after safeguard scoring.</p></div></div>
-<div><b>Research</b><div><h3>Exergy optimization of an industrial urea synthesis loop</h3><p>First-author paper submitted to Energy Conversion and Management; MATLAB thermodynamic modelling, now in revision.</p></div></div>
-<div><b>Research</b><div><h3>Post-combustion CO2 capture with CESAR1 solvent</h3><p>Aspen Plus and MATLAB process analysis; review work on boron COFs for CO2 capture and photocatalytic CO2-to-methanol conversion.</p></div></div>
-<div><b>Venture</b><div><h3>i2i Skills and the Ocean Idea Challenge</h3><p>Seawater CO2-to-methanol venture concept; 30 structured customer discovery interviews, the same method planned for Phase 1.</p></div></div>
-<div><b>Software</b><div><h3>Production software</h3><p>Point-of-sale system with card-payment integration, a Quran study app, and websites for clinics and community organizations.</p></div></div>
+<div class="work stagger">
+<div class="card reveal" style="--i:0"><b>Engineering</b><div><h3>1.25 MW PEM hydrogen electrolyser design package</h3><p>Authored the 7-sheet P&amp;ID, 3-sheet PFD and general-arrangement drawings for the WESI project (Hygreen ELY1250) at Bluedrop ISM, through multiple revisions.</p></div></div>
+<div class="card reveal" style="--i:1"><b>Process safety</b><div><h3>HAZID and HAZOP, 16 nodes</h3><p>Led a full-guideword HAZOP and HAZID on the electrolyser P&amp;ID with a 5×5 risk matrix and before/after safeguard scoring; issued as Word and Excel deliverables.</p></div></div>
+<div class="card reveal" style="--i:2"><b>Research</b><div><h3>Exergy optimization of an industrial urea synthesis loop</h3><p>First-author paper submitted to Energy Conversion and Management; MATLAB-based thermodynamic modelling, now in revision.</p></div></div>
+<div class="card reveal" style="--i:3"><b>Research</b><div><h3>Post-combustion CO2 capture with CESAR1 solvent</h3><p>Technical paper with Aspen Plus and MATLAB process analysis; further review work on boron COFs for CO2 capture and photocatalytic CO2-to-methanol conversion.</p></div></div>
+<div class="card reveal" style="--i:4"><b>Venture</b><div><h3>i2i Skills and the Ocean Idea Challenge</h3><p>Seawater CO2-to-methanol venture concept; 30 structured customer discovery interviews, the same method planned for Kitepower’s Phase 1.</p></div></div>
+<div class="card reveal" style="--i:5"><b>Software</b><div><h3>Production software</h3><p>Point-of-sale system with card-payment integration, a Quran study app, and websites for clinics and community organizations.</p></div></div>
 </div>
 </div>
 </div></section>
-</main>
 
-<footer><div class="in"><span>Kitepower is a working name; a trademark clearance search is part of Phase 1. Figures are projections for an idea-stage venture.</span><span>St. John’s, NL · October 2026</span></div></footer>
+<footer><div class="in"><div class="glass"><span>Kitepower is a working name; a trademark clearance search is part of Phase 1. Figures are projections for an idea-stage venture.</span><span>St. John’s, NL · October 2026</span></div></div></footer>
+</div>
 
-<script>
-// Liquid glass: pointer-tracked specular on every .lg surface, plus real edge refraction on .lg.rf surfaces.
-// Refraction builds one SVG displacement map per surface, sized to it, so the bend sits in a fixed-width band
-// along the rounded edge however wide the surface is. Chromium is the only engine that accepts an SVG filter
-// inside backdrop-filter; everywhere else the CSS blur + saturate fallback stays in place.
-(function(){
-  var NS='http://www.w3.org/2000/svg',root=document.documentElement;
-  var fine=matchMedia('(hover: hover) and (pointer: fine)').matches;
-
-  // specular highlight follows the pointer; written per element, never on :root, so only that surface restyles
-  if(fine){
-    document.addEventListener('pointermove',function(e){
-      var t=e.target.closest?e.target.closest('.lg'):null;if(!t)return;
-      var r=t.getBoundingClientRect();
-      t.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');
-      t.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%');
-    },{passive:true});
-  }
-
-  var brands=(navigator.userAgentData&&navigator.userAgentData.brands)||[];
-  var chromium=brands.some(function(b){return /Chromium/.test(b.brand)});
-  if(!chromium||matchMedia('(prefers-reduced-transparency: reduce)').matches)return;
-
-  var svg=document.createElementNS(NS,'svg');
-  svg.setAttribute('aria-hidden','true');svg.setAttribute('width','0');svg.setAttribute('height','0');
-  svg.style.cssText='position:absolute;width:0;height:0;overflow:hidden;pointer-events:none';
-  document.body.appendChild(svg);
-  root.classList.add('refract');
-
-  var SCALE=0.5; // maps are drawn at half resolution and stretched; the displacement is smooth so nothing is lost
-
-  function edgeMap(w,h,radius,band){
-    var cw=Math.max(2,Math.ceil(w*SCALE)),ch=Math.max(2,Math.ceil(h*SCALE));
-    var r=Math.min(radius,w/2,h/2)*SCALE,b=band*SCALE;
-    var c=document.createElement('canvas');c.width=cw;c.height=ch;
-    var g=c.getContext('2d'),img=g.createImageData(cw,ch),d=img.data,hx=cw/2,hy=ch/2;
-    for(var y=0;y<ch;y++){
-      for(var x=0;x<cw;x++){
-        var px=x+0.5-hx,py=y+0.5-hy,ax=Math.abs(px),ay=Math.abs(py);
-        var qx=ax-(hx-r),qy=ay-(hy-r);
-        // signed distance to the rounded rectangle (negative inside)
-        var ox=Math.max(qx,0),oy=Math.max(qy,0);
-        var sd=Math.sqrt(ox*ox+oy*oy)+Math.min(Math.max(qx,qy),0)-r;
-        var depth=-sd,R=128,G=128;
-        if(depth>=0&&depth<b){
-          var nx,ny;
-          if(qx>0&&qy>0){var l=Math.sqrt(qx*qx+qy*qy)||1;nx=qx/l;ny=qy/l}
-          else if(qx>qy){nx=1;ny=0}else{nx=0;ny=1}
-          nx*=px<0?-1:1;ny*=py<0?-1:1;
-          var m=1-depth/b;m=m*m*(3-2*m);
-          // sample from further inside the surface: content near the rim is pulled outward, like a lens edge
-          R=128-nx*m*127;G=128-ny*m*127;
-        }
-        var i=(y*cw+x)*4;d[i]=R;d[i+1]=G;d[i+2]=128;d[i+3]=255;
-      }
-    }
-    g.putImageData(img,0,0);
-    return c.toDataURL();
-  }
-
-  var seq=0,built=new WeakMap();
-  function build(el){
-    var w=Math.round(el.offsetWidth),h=Math.round(el.offsetHeight);
-    if(w<24||h<24)return;
-    var prev=built.get(el);
-    if(prev&&prev.w===w&&prev.h===h)return;
-    var radius=parseFloat(getComputedStyle(el).borderTopLeftRadius)||0;
-    var band=Math.max(10,Math.min(26,Math.min(w,h)*0.32));
-    var id=prev?prev.id:'lgf-'+(++seq);
-    var f=prev?prev.f:document.createElementNS(NS,'filter');
-    if(!prev){f.setAttribute('id',id);svg.appendChild(f)}
-    f.setAttribute('x','0');f.setAttribute('y','0');f.setAttribute('width',w);f.setAttribute('height',h);
-    f.setAttribute('filterUnits','userSpaceOnUse');f.setAttribute('primitiveUnits','userSpaceOnUse');
-    f.setAttribute('color-interpolation-filters','sRGB');
-    f.innerHTML='';
-    var im=document.createElementNS(NS,'feImage');
-    im.setAttribute('href',edgeMap(w,h,radius,band));
-    im.setAttribute('x','0');im.setAttribute('y','0');im.setAttribute('width',w);im.setAttribute('height',h);
-    im.setAttribute('preserveAspectRatio','none');im.setAttribute('result','map');
-    var dm=document.createElementNS(NS,'feDisplacementMap');
-    dm.setAttribute('in','SourceGraphic');dm.setAttribute('in2','map');
-    dm.setAttribute('scale',Math.round(band*1.5));
-    dm.setAttribute('xChannelSelector','R');dm.setAttribute('yChannelSelector','G');
-    f.appendChild(im);f.appendChild(dm);
-    el.style.setProperty('--lg-url','url(#'+id+')');
-    el.classList.add('rf-on');
-    built.set(el,{w:w,h:h,id:id,f:f});
-  }
-
-  var els=[].slice.call(document.querySelectorAll('.lg.rf'));
-  function all(){els.forEach(build)}
-  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(all);
-  all();
-  if('ResizeObserver' in window){
-    var pending=null;
-    var ro=new ResizeObserver(function(entries){
-      // rebuild after the resize settles; a nav that animates its width would otherwise rebuild every frame
-      clearTimeout(pending);pending=setTimeout(function(){entries.forEach(function(e){build(e.target)})},180);
-    });
-    els.forEach(function(el){ro.observe(el)});
-  }
-})();
-</script>
 <script>
 (function(){
   var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var SVGNS='http://www.w3.org/2000/svg';
-  function el(tag,attrs,parent,text){var e=document.createElementNS(SVGNS,tag);for(var k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent.appendChild(e);return e}
-  function css(name){return getComputedStyle(document.documentElement).getPropertyValue(name).trim()}
+  var fine=window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  // scroll reveals, with a safety fallback so nothing stays hidden
+  var els=document.querySelectorAll('.reveal');
+  if('IntersectionObserver' in window && !reduce){
+    els.forEach(function(e){if(e.getBoundingClientRect().top>window.innerHeight*0.92)e.classList.add('pre')});
+    var io=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){x.target.classList.remove('pre');io.unobserve(x.target)}})},{threshold:.1,rootMargin:'0px 0px -5% 0px'});
+    els.forEach(function(e){io.observe(e)});
+    setTimeout(function(){els.forEach(function(e){if(e.getBoundingClientRect().top<window.innerHeight)e.classList.remove('pre')})},2500);
+  }
+  // counters
+  function run(el){var end=+el.dataset.count,p=el.dataset.prefix||'',s=el.dataset.suffix||'',sep=el.dataset.sep,t0=null;
+    function fmt(n){return sep?n.toLocaleString('en-CA'):n}
+    if(reduce){el.textContent=p+fmt(end)+s;return}
+    function f(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/1500);k=1-Math.pow(1-k,3);el.textContent=p+fmt(Math.round(end*k))+s;if(k<1)requestAnimationFrame(f)}requestAnimationFrame(f)}
+  var cs=document.querySelectorAll('[data-count]');
+  if('IntersectionObserver' in window){var io2=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){run(x.target);io2.unobserve(x.target)}})},{threshold:.5});cs.forEach(function(c){io2.observe(c)})}else{cs.forEach(run)}
+  // one-shot triggers: budget bar, roadmap line, market rings
+  function once(id,fn){var el=document.getElementById(id);if(!el)return;if(!('IntersectionObserver' in window)||reduce){fn(el);return}var o=new IntersectionObserver(function(en){en.forEach(function(x){if(x.isIntersecting){fn(el);o.unobserve(el)}})},{threshold:.4});o.observe(el)}
+  var ring=document.getElementById('ring');ring.classList.add('pre');
+  once('bar',function(el){el.classList.add('go')});
+  once('roadline',function(el){el.classList.add('go')});
+  once('ring',function(el){el.classList.remove('pre')});
+  // nav: compact on scroll, progress, active section
+  var nav=document.getElementById('nav'),prog=document.getElementById('prog'),links=document.querySelectorAll('#menu a');
+  var secs=[].map.call(links,function(a){return document.querySelector(a.getAttribute('href'))});
+  function onScroll(){var y=window.scrollY;nav.classList.toggle('compact',y>80);var h=document.documentElement.scrollHeight-window.innerHeight;prog.style.width=(h>0?y/h*100:0)+'%';
+    var cur=-1;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<window.innerHeight*0.4)cur=i});links.forEach(function(a,i){a.classList.toggle('on',i===cur)})}
+  window.addEventListener('scroll',onScroll,{passive:true});onScroll();
+  // pointer-tracked specular highlight on glass
+  if(fine){document.addEventListener('pointermove',function(e){var t=e.target.closest?e.target.closest('.glass'):null;if(!t)return;var r=t.getBoundingClientRect();t.style.setProperty('--mx',((e.clientX-r.left)/r.width*100).toFixed(1)+'%');t.style.setProperty('--my',((e.clientY-r.top)/r.height*100).toFixed(1)+'%')},{passive:true})}
 
-  // ---------- hero: simulated K-50 pumping cycle ----------
-  var hero=document.getElementById('top'),cv=document.getElementById('sky'),ctx=cv.getContext('2d');
-  var W=0,H=0,dpr=Math.min(2,window.devicePixelRatio||1);
-  function size(){W=hero.clientWidth;H=hero.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
-  size();window.addEventListener('resize',function(){size();if(!running)draw(0)});
-  var streaks=[];for(var i=0;i<56;i++)streaks.push({x:Math.random(),y:Math.random()*0.85,l:24+Math.random()*80,v:.5+Math.random()*1.4,a:.04+Math.random()*.14});
-  var t=30,u=0,amp=1,last=0,running=false,visible=true;
-  var hPhase=document.getElementById('hPhase'),hPhaseT=document.getElementById('hPhaseT'),hPow=document.getElementById('hPow'),hF=document.getElementById('hF'),hV=document.getElementById('hV'),hL=document.getElementById('hL'),hA=document.getElementById('hA');
-  var hudTick=0,EL=40*Math.PI/180;
-  function draw(dt){
-    t+=dt*10;var tau=t%100,out=tau<80;
-    var L=out?240+2*tau:400-8*(tau-80);
-    u+=dt*(out?1.7:0.6);amp+=((out?1:0.25)-amp)*Math.min(1,dt*2.5);
-    ctx.clearRect(0,0,W,H);
-    var gx=W*(W<880?0.1:0.5),gy=H*0.86;
-    // sea horizon
-    ctx.fillStyle='rgba(4,8,15,.55)';ctx.fillRect(0,gy+6,W,H-gy);
-    ctx.strokeStyle='rgba(238,243,248,.16)';ctx.lineWidth=1;ctx.beginPath();ctx.moveTo(0,gy+6);ctx.lineTo(W,gy+6);ctx.stroke();
-    // wind streaks, blowing left to right
-    for(var i=0;i<streaks.length;i++){var s=streaks[i];ctx.strokeStyle='rgba(238,243,248,'+s.a+')';var x=s.x*W,y=s.y*gy;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+s.l,y);ctx.stroke();s.x+=s.v*dt*0.12;if(s.x>1.1){s.x=-0.12;s.y=Math.random()*0.85}}
-    // geometry: tether at 40 degree elevation, 400 m maps to most of the free sky
-    var maxPx=Math.min((W-gx-40)/Math.cos(EL),(gy-60)/Math.sin(EL))*0.95,k=maxPx/400;
-    // altitude scale on the right
-    ctx.font='500 10px "IBM Plex Mono", monospace';ctx.textAlign='right';
-    for(var a=100;a<=300;a+=100){var yy=gy-a*k;if(yy<40)continue;ctx.strokeStyle='rgba(238,243,248,.07)';ctx.beginPath();ctx.moveTo(gx,yy);ctx.lineTo(W,yy);ctx.stroke();ctx.fillStyle='rgba(238,243,248,.35)';ctx.fillText(a+' m',W-12,yy-5)}
-    var cx=gx+L*k*Math.cos(EL),cy=gy-L*k*Math.sin(EL);
-    var ax=L*k*0.17*amp,ay=L*k*0.075*amp;
-    // figure-eight guide
-    ctx.setLineDash([4,7]);ctx.strokeStyle='rgba(255,107,31,.28)';ctx.lineWidth=1.5;ctx.beginPath();
-    for(var j=0;j<=100;j++){var w=j/100*Math.PI*2,px=cx+ax*Math.sin(w),py=cy+ay*Math.sin(2*w);j?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.stroke();ctx.setLineDash([]);
-    var kx=cx+ax*Math.sin(u),ky=cy+ay*Math.sin(2*u);
-    // tether: taut on reel-out, sagging on reel-in
-    var qx=(gx+kx)/2,qy=(gy+ky)/2+(out?4:26);
-    ctx.strokeStyle=out?'rgba(238,243,248,.9)':'rgba(238,243,248,.4)';ctx.lineWidth=out?1.8:1.2;ctx.beginPath();ctx.moveTo(gx,gy-8);ctx.quadraticCurveTo(qx,qy,kx,ky);ctx.stroke();
+  // hero scene: wind field, kite, tether, power pulses
+  var cv=document.getElementById('sky'),ctx=cv.getContext('2d'),W,H,dpr=Math.min(2,window.devicePixelRatio||1),chip=document.getElementById('chip'),scene=document.getElementById('scene');
+  function size(){W=cv.clientWidth;H=cv.clientHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}
+  size();window.addEventListener('resize',size);
+  var streaks=[];for(var i=0;i<70;i++)streaks.push({x:Math.random(),y:Math.random(),l:20+Math.random()*70,v:.4+Math.random()*1.3,a:.04+Math.random()*.18});
+  var pulses=[];var T=0,mx=0,my=0,tmx=0,tmy=0;
+  if(fine){scene.addEventListener('pointermove',function(e){var r=scene.getBoundingClientRect();tmx=(e.clientX-r.left)/r.width-0.5;tmy=(e.clientY-r.top)/r.height-0.5});scene.addEventListener('pointerleave',function(){tmx=0;tmy=0})}
+  function frame(){
+    ctx.clearRect(0,0,W,H);T+=reduce?0:1/60;mx+=(tmx-mx)*0.05;my+=(tmy-my)*0.05;
+    // altitude grid
+    ctx.strokeStyle='rgba(243,246,247,.07)';ctx.lineWidth=1;for(var a=1;a<=4;a++){var yy=H*0.92-(H*0.8)*a/5;ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(W,yy);ctx.stroke();ctx.fillStyle='rgba(243,246,247,.35)';ctx.font='500 10px Inter, Arial';ctx.fillText((a*100)+' m',8,yy-4)}
+    streaks.forEach(function(s){ctx.strokeStyle='rgba(243,246,247,'+s.a+')';ctx.lineWidth=1;ctx.beginPath();var x=s.x*W,y=s.y*H+my*20;ctx.moveTo(x,y);ctx.lineTo(x+s.l,y);ctx.stroke();s.x+=s.v/W*2.4;if(s.x*W>W+80){s.x=-0.1;s.y=Math.random()}});
+    var gx=W*0.14,gy=H*0.92;
+    var phase=(T%10)<8;
     // ground station
-    ctx.fillStyle='#EEF3F8';ctx.fillRect(gx-30,gy-6,60,12);
-    ctx.fillStyle=out?'#FF6B1F':'#7E8EA0';ctx.beginPath();ctx.arc(gx,gy-8,7,0,Math.PI*2);ctx.fill();
-    if(out){ctx.strokeStyle='rgba(255,107,31,.35)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(gx,gy-8,12+4*Math.sin(t*3),0,Math.PI*2);ctx.stroke()}
-    // wing
-    var ang=Math.atan2(2*ay*Math.cos(2*u),ax*Math.cos(u)||0.0001);
-    ctx.save();ctx.translate(kx,ky);ctx.rotate(ang);ctx.shadowColor='rgba(255,107,31,.55)';ctx.shadowBlur=16;ctx.fillStyle='#FF6B1F';
-    ctx.beginPath();ctx.moveTo(-26,-5);ctx.quadraticCurveTo(0,-20,26,-5);ctx.lineTo(18,6);ctx.quadraticCurveTo(0,-4,-18,6);ctx.closePath();ctx.fill();ctx.shadowBlur=0;
-    ctx.fillStyle='#EEF3F8';ctx.fillRect(-6,-11,12,3);ctx.restore();
-    // telemetry, a few times a second
-    hudTick+=dt;if(hudTick>.12||dt===0){hudTick=0;
-      var P=out?65+2.2*Math.sin(u*2):-10,F=out?32.5+1.1*Math.sin(u*2):1.3,V=out?2:-8;
-      hPow.textContent=(P>0?'':'−')+Math.abs(P).toFixed(1)+' kW';hF.textContent=F.toFixed(1)+' kN';
-      hV.textContent=(V>0?'+':'−')+Math.abs(V).toFixed(1)+' m/s';hL.textContent=Math.round(L)+' m';hA.textContent=Math.round(L*Math.sin(EL))+' m';
-      hPhaseT.textContent=out?'REEL-OUT':'REEL-IN';hPhase.classList.toggle('in',!out);
-      hPow.style.color=out?'':'var(--night-ink-2)'}
+    ctx.fillStyle='#F2F5F9';ctx.beginPath();ctx.roundRect?ctx.roundRect(gx-36,gy-14,72,16,5):ctx.rect(gx-36,gy-14,72,16);ctx.fill();
+    if(phase){ctx.fillStyle='rgba(240,165,48,'+(0.2+0.15*Math.sin(T*6))+')';ctx.beginPath();ctx.arc(gx,gy-16,18,0,Math.PI*2);ctx.fill()}
+    ctx.fillStyle=phase?'#F0A530':'#9AA8B5';ctx.beginPath();ctx.arc(gx,gy-16,9,0,Math.PI*2);ctx.fill();
+    var cx=W*0.6+mx*30,cy=H*0.38+my*24,ax=W*0.3,ay=H*0.19;
+    ctx.strokeStyle='rgba(47,209,181,.33)';ctx.setLineDash([6,8]);ctx.lineWidth=2;ctx.beginPath();
+    for(var k=0;k<=120;k++){var u=k/120*Math.PI*2;var px=cx+ax*Math.sin(u),py=cy+ay*Math.sin(2*u);k?ctx.lineTo(px,py):ctx.moveTo(px,py)}ctx.stroke();ctx.setLineDash([]);
+    var u=T*0.9;var kx=cx+ax*Math.sin(u),ky=cy+ay*Math.sin(2*u);
+    var qx=(gx+kx)/2,qy=(gy+ky)/2+(phase?0:30);
+    ctx.strokeStyle=phase?'rgba(243,246,247,.92)':'rgba(243,246,247,.45)';ctx.lineWidth=phase?2.2:1.4;ctx.beginPath();ctx.moveTo(gx,gy-16);ctx.quadraticCurveTo(qx,qy,kx,ky);ctx.stroke();
+    // power pulses travelling kite -> ground during reel-out
+    if(phase&&!reduce&&Math.floor(T*4)!==Math.floor((T-1/60)*4))pulses.push(0);
+    for(var j=pulses.length-1;j>=0;j--){pulses[j]+=0.012;var s=pulses[j];if(s>=1){pulses.splice(j,1);continue}var bx=(1-s)*(1-s)*kx+2*(1-s)*s*qx+s*s*gx,by=(1-s)*(1-s)*ky+2*(1-s)*s*qy+s*s*(gy-16);
+      ctx.fillStyle='rgba(255,194,102,.9)';ctx.beginPath();ctx.arc(bx,by,3,0,Math.PI*2);ctx.fill()}
+    // trailing ribbon
+    ctx.strokeStyle='rgba(47,209,181,.5)';ctx.lineWidth=2;ctx.beginPath();for(var r=0;r<14;r++){var ur=u-r*0.05;var rx=cx+ax*Math.sin(ur),ry=cy+ay*Math.sin(2*ur);r?ctx.lineTo(rx,ry):ctx.moveTo(rx,ry)}ctx.stroke();
+    var ang=Math.atan2(2*ay*Math.cos(2*u),ax*Math.cos(u));
+    ctx.save();ctx.translate(kx,ky);ctx.rotate(ang);var g=ctx.createLinearGradient(-30,0,30,0);g.addColorStop(0,'#2FD1B5');g.addColorStop(1,'#FFC266');ctx.shadowColor='rgba(47,209,181,.6)';ctx.shadowBlur=18;ctx.fillStyle=g;ctx.beginPath();ctx.moveTo(-34,-8);ctx.lineTo(8,-24);ctx.lineTo(34,6);ctx.lineTo(-6,22);ctx.closePath();ctx.fill();ctx.shadowBlur=0;ctx.strokeStyle='#0B1F3A';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(-34,-8);ctx.lineTo(34,6);ctx.stroke();ctx.restore();
+    var want=phase?'<b>65 kW</b>reel-out · K-50 cycle':'<b>−10 kW</b>reel-in · 20 s';window.__live1=phase?'Reel-out\u00a065 kW':'Reel-in\u00a0−10 kW';if(chip.innerHTML!==want)chip.innerHTML=want;
+    if(!reduce)requestAnimationFrame(frame)
   }
-  function frame(ts){if(!running)return;var dt=last?Math.min(.05,(ts-last)/1000):0;last=ts;draw(dt);requestAnimationFrame(frame)}
-  function start(){if(running||reduce)return;running=true;last=0;requestAnimationFrame(frame)}
-  function stop(){running=false}
-  draw(0);
-  if(!reduce){
-    if('IntersectionObserver' in window){new IntersectionObserver(function(e){visible=e[0].isIntersecting;visible&&!document.hidden?start():stop()},{threshold:0}).observe(hero)}else start();
-    document.addEventListener('visibilitychange',function(){document.hidden?stop():(visible&&start())});
-  }
+  frame();
 
-  // ---------- wind profile (one-seventh power law) ----------
+  // SVG cycle with phase cards
+  var kite=document.getElementById('kite'),teth=document.getElementById('tether'),fig=document.getElementById('fig8'),ph=document.getElementById('ph'),drum=document.getElementById('drum'),pulse=document.getElementById('pulse'),p1=document.getElementById('p1'),p2=document.getElementById('p2');
+  var L=fig.getTotalLength(),s0=0;
+  function cyc(ts){if(!s0)s0=ts;var t=(ts-s0)/1000;var p=fig.getPointAtLength((t*70)%L),q=fig.getPointAtLength((t*70+2)%L);
+    var a=Math.atan2(q.y-p.y,q.x-p.x)*180/Math.PI;kite.setAttribute('transform','translate('+p.x+' '+p.y+') rotate('+a+')');
+    teth.setAttribute('x2',p.x);teth.setAttribute('y2',p.y);var out=(t%10)<8;teth.setAttribute('stroke-width',out?3:1.5);drum.setAttribute('fill',out?'#F0A530':'#9AA8B5');ph.textContent=out?'REEL-OUT · 65 kW':'REEL-IN · −10 kW';window.__live2=out?'Reel-out\u00a080 s':'Reel-in\u00a020 s';
+    var f=(t*0.8)%1;pulse.setAttribute('cx',p.x+(95-p.x)*f);pulse.setAttribute('cy',p.y+(300-p.y)*f);pulse.setAttribute('opacity',out?1:0);
+    p1.classList.toggle('live',out);p2.classList.toggle('live',!out);
+    if(!reduce)requestAnimationFrame(cyc)}
+  requestAnimationFrame(cyc);
+
+  var cb=document.getElementById('copy');cb.addEventListener('click',function(){var m=document.getElementById('mail').textContent;
+    function sel(){var r=document.createRange();r.selectNodeContents(document.getElementById('mail'));var s=getSelection();s.removeAllRanges();s.addRange(r)}
+    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m).then(function(){cb.textContent='Copied'},sel)}else sel()});
+
+  // custom cursor
   (function(){
-    var s=document.getElementById('prof'),x0=60,x1=470,y0=330,y1=30,hMax=330,vMin=0.6,vMax=1.3;
-    function X(v){return x0+(v-vMin)/(vMax-vMin)*(x1-x0)}function Y(h){return y0-h/hMax*(y0-y1)}
-    var ink3=css('--ink-3'),rule=css('--rule'),orange=css('--orange'),ink=css('--ink'),ice=css('--ice');
-    [0,100,200,300].forEach(function(h){el('line',{x1:x0,x2:x1,y1:Y(h),y2:Y(h),stroke:rule,'stroke-width':1},s);el('text',{x:x0-10,y:Y(h)+4,'text-anchor':'end'},s,h+' m')});
-    [0.6,0.8,1.0,1.2].forEach(function(v){el('text',{x:X(v),y:y0+22,'text-anchor':'middle'},s,'×'+v.toFixed(1))});
-    el('text',{x:(x0+x1)/2,y:y0+42,'text-anchor':'middle'},s,'wind speed relative to an 80 m hub');
-    var d='';for(var h=10;h<=300;h+=5){var v=Math.pow(h/80,1/7);d+=(h===10?'M':'L')+X(v).toFixed(1)+' '+Y(h).toFixed(1)}
-    el('path',{d:d,fill:'none',stroke:ice,'stroke-width':2.5},s);
-    // tower turbine band (to 150 m tip height)
-    el('rect',{x:x0,y:Y(150),width:x1-x0,height:Y(0)-Y(150),fill:ice,'fill-opacity':.07},s);
-    el('text',{x:x0+10,y:Y(150)+18,class:'lbl'},s,'Tower turbine reach');
-    el('rect',{x:x0,y:Y(300),width:x1-x0,height:Y(150)-Y(300),fill:orange,'fill-opacity':.07},s);
-    el('text',{x:x0+10,y:Y(300)+18,class:'lbl'},s,'K-50 flight band');
-    var v80=1,v300=Math.pow(300/80,1/7);
-    el('circle',{cx:X(v80),cy:Y(80),r:5,fill:ink},s);el('text',{x:X(v80)-10,y:Y(80)+4,'text-anchor':'end',class:'lbl'},s,'80 m hub · ×1.00');
-    el('circle',{cx:X(v300),cy:Y(300),r:6,fill:orange},s);el('text',{x:X(v300)-12,y:Y(300)+5,'text-anchor':'end',class:'big'},s,'×'+v300.toFixed(2));
+    if(!fine||!window.matchMedia('(hover: hover)').matches)return;
+    var cur=document.getElementById('cur'),ring=document.getElementById('curRing'),dot=document.getElementById('curDot'),lab=document.getElementById('curLabel');
+    var x=innerWidth/2,y=innerHeight/2,rx=x,ry=y,seen=false,liveEl=null,hoverEl=null;
+    document.body.classList.add('cc');
+    document.addEventListener('pointermove',function(e){if(e.pointerType&&e.pointerType!=='mouse')return;x=e.clientX;y=e.clientY;if(!seen){seen=true;rx=x;ry=y}cur.classList.remove('hidden');
+      var t=e.target.closest?e.target:null;var h=t&&t.closest('a,button,[data-cursor]');var lv=t&&t.closest('[data-cursor-live]');
+      hoverEl=h;liveEl=lv;
+      cur.classList.toggle('hover',!!h&&!(h.dataset.cursor));
+      cur.classList.toggle('label',!!h&&!!h.dataset.cursor);
+      cur.classList.toggle('live',!!lv&&!h);
+      if(h&&h.dataset.cursor)lab.textContent=h.dataset.cursor;
+    },{passive:true});
+    document.addEventListener('pointerdown',function(){cur.classList.add('down')});document.addEventListener('pointerup',function(){cur.classList.remove('down')});
+    document.documentElement.addEventListener('mouseleave',function(){cur.classList.add('hidden')});document.documentElement.addEventListener('mouseenter',function(){cur.classList.remove('hidden')});
+    window.addEventListener('blur',function(){cur.classList.add('hidden')});
+    // magnetic buttons
+    document.querySelectorAll('.mag').forEach(function(b){b.addEventListener('pointermove',function(e){if(reduce)return;var r=b.getBoundingClientRect();var dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2);b.style.transform='translate('+(dx*0.22).toFixed(1)+'px,'+(dy*0.28).toFixed(1)+'px)'});b.addEventListener('pointerleave',function(){b.style.transform=''})});
+    function loop(){var k=reduce?1:0.18;rx+=(x-rx)*k;ry+=(y-ry)*k;dot.style.transform='translate('+x+'px,'+y+'px) translate(-50%,-50%)';ring.style.transform='translate('+rx.toFixed(1)+'px,'+ry.toFixed(1)+'px) translate(-50%,-50%)'+(cur.classList.contains('down')?' scale(.85)':'');
+      if(liveEl&&!hoverEl){var v=liveEl.dataset.cursorLive==='1'?window.__live1:window.__live2;if(v&&lab.textContent!==v)lab.textContent=v}
+      requestAnimationFrame(loop)}
+    loop();
   })();
-
-  // ---------- pumping-cycle power chart, to scale ----------
-  (function(){
-    var g=document.getElementById('cycg'),x0=56,x1=500,yTop=30,yBot=250,pMax=70,pMin=-20;
-    function X(s){return x0+s/100*(x1-x0)}function Y(p){return yTop+(pMax-p)/(pMax-pMin)*(yBot-yTop)}
-    var rule=css('--rule'),ink3=css('--ink-3'),orange=css('--orange'),neg=css('--neg'),ink=css('--ink');
-    [-10,0,25,50,65].forEach(function(p){el('line',{x1:x0,x2:x1,y1:Y(p),y2:Y(p),stroke:p===0?ink3:rule,'stroke-width':1},g);el('text',{x:x0-8,y:Y(p)+4,'text-anchor':'end'},g,p+' kW')});
-    el('rect',{x:X(0),y:Y(65),width:X(80)-X(0),height:Y(0)-Y(65),fill:orange,'fill-opacity':.85},g);
-    el('rect',{x:X(80),y:Y(0),width:X(100)-X(80),height:Y(-10)-Y(0),fill:neg,'fill-opacity':.8},g);
-    el('line',{x1:x0,x2:x1,y1:Y(50),y2:Y(50),stroke:ink,'stroke-width':1.5,'stroke-dasharray':'5 4'},g);
-    el('text',{x:x0+8,y:Y(50)-7,class:'t'},g,'Net 50 kW');
-    el('text',{x:X(40),y:Y(65)+20,'text-anchor':'middle',class:'t',fill:'#140600',style:'fill:#140600'},g,'Reel-out · 80 s');
-    el('text',{x:X(90),y:Y(-10)+16,'text-anchor':'middle'},g,'Reel-in');
-    [0,20,40,60,80,100].forEach(function(s){el('text',{x:X(s),y:yBot+26,'text-anchor':'middle'},g,s+' s')});
-  })();
-
-  // ---------- cost bars grow when seen ----------
-  var cost=document.getElementById('cost');
-  if('IntersectionObserver' in window&&!reduce&&cost.getBoundingClientRect().top>innerHeight){var io=new IntersectionObserver(function(e){if(e[0].isIntersecting){cost.classList.remove('pre');io.disconnect()}},{threshold:.3});io.observe(cost)}else cost.classList.remove('pre');
-
-  // ---------- savings model ----------
-  var uIn=document.getElementById('u'),cf=document.getElementById('cf'),dp=document.getElementById('dp');
-  function fmt(n){return Math.round(n).toLocaleString('en-CA')}
-  function calc(){
-    var n=+uIn.value,c=+cf.value/100,p=+dp.value;
-    var mwh=n*50*8760*c/1000,litres=mwh*1000*0.294,co2=litres*2.68/1000,save=litres*p,share=mwh/50000*100;
-    document.getElementById('uo').textContent=n;document.getElementById('cfo').textContent=Math.round(c*100)+'%';document.getElementById('dpo').textContent='$'+p.toFixed(2)+'/L';
-    document.getElementById('oE').textContent=fmt(mwh)+' MWh';
-    document.getElementById('oL').textContent=(litres>=1e6?(litres/1e6).toFixed(2)+'M':fmt(Math.round(litres/100)*100))+' L';
-    document.getElementById('oC').textContent=fmt(co2)+' t';
-    document.getElementById('oS').textContent=save>=1e6?'$'+(save/1e6).toFixed(2)+'M':'$'+fmt(Math.round(save/100)*100);
-    document.getElementById('oP').textContent=share.toFixed(1)+'%';document.getElementById('oPb').style.width=Math.min(100,share)+'%';
-  }
-  [uIn,cf,dp].forEach(function(i){i.addEventListener('input',calc)});calc();
-
-  // ---------- nav: compact capsule, reading progress, active section ----------
-  var nav=document.getElementById('nav'),prog=document.getElementById('prog');
-  var links=[].slice.call(document.querySelectorAll('#menu a')),secs=links.map(function(a){return document.querySelector(a.getAttribute('href'))});
-  var ticking=false;
-  function onScroll(){ticking=false;var y=scrollY,max=document.documentElement.scrollHeight-innerHeight;
-    nav.classList.toggle('compact',y>60);prog.style.transform='scaleX('+(max>0?Math.min(1,y/max):0).toFixed(4)+')';
-    var cur=-1;secs.forEach(function(s,i){if(s&&s.getBoundingClientRect().top<innerHeight*0.35)cur=i});links.forEach(function(a,i){a.classList.toggle('on',i===cur)})}
-  addEventListener('scroll',function(){if(!ticking){ticking=true;requestAnimationFrame(onScroll)}},{passive:true});onScroll();
-
-  // ---------- scroll reveals, counters, drawn lines ----------
-  // Only things below the fold at load start hidden, so the first screen is complete at rest.
-  function below(e){return e.getBoundingClientRect().top>innerHeight*0.95}
-  var canIO='IntersectionObserver' in window&&!reduce;
-  var rv=[].slice.call(document.querySelectorAll('.rv'));
-  // stagger siblings that share a parent
-  rv.forEach(function(e){var sib=[].filter.call(e.parentNode.children,function(c){return c.classList.contains('rv')});if(sib.length>1)e.style.setProperty('--i',sib.indexOf(e))});
-  function count(e){var end=+e.dataset.count,pre=e.dataset.pre||'',suf=e.dataset.suf||'',sep=e.dataset.sep,t0=0;
-    function f(ts){if(!t0)t0=ts;var k=Math.min(1,(ts-t0)/1400);k=1-Math.pow(1-k,3);var n=Math.round(end*k);e.textContent=pre+(sep?n.toLocaleString('en-CA'):n)+suf;if(k<1)requestAnimationFrame(f)}
-    requestAnimationFrame(f)}
-  var road=document.getElementById('road'),bar=document.getElementById('bar');
-  if(canIO){
-    var seen=new IntersectionObserver(function(en){en.forEach(function(x){if(!x.isIntersecting)return;var t=x.target;
-      t.classList.remove('pre');if(t===road)road.classList.add('go');if(t.dataset.count)count(t);seen.unobserve(t)})},{threshold:.15,rootMargin:'0px 0px -6% 0px'});
-    rv.forEach(function(e){if(below(e)){e.classList.add('pre');seen.observe(e)}});
-    [].forEach.call(document.querySelectorAll('[data-count]'),function(e){if(below(e))seen.observe(e)});
-    if(below(bar)){bar.classList.add('pre');seen.observe(bar)}
-    if(below(road))seen.observe(road);else road.classList.add('go');
-    // safety net: anything still hidden after the reader reaches it gets shown
-    addEventListener('scroll',function(){rv.forEach(function(e){if(e.classList.contains('pre')&&e.getBoundingClientRect().top<innerHeight*0.6)e.classList.remove('pre')})},{passive:true});
-  }else{road.classList.add('go')}
-
-  // ---------- copy email ----------
-  var cb=document.getElementById('copy');cb.addEventListener('click',function(){var m=document.getElementById('mail');
-    function sel(){var r=document.createRange();r.selectNodeContents(m);var s=getSelection();s.removeAllRanges();s.addRange(r);cb.textContent='Selected'}
-    if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(m.textContent).then(function(){cb.textContent='Copied'},sel)}else sel()});
 })();
 </script>
-</body>
-</html>
+
+</body></html>
